@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1065208923378",
+    "project_id": "mvvm-expense-tracker-app",
+    "storage_bucket": "mvvm-expense-tracker-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065208923378:android:00804c7f6ed7a1895e7c6b",
+        "android_client_info": {
+          "package_name": "com.example.mvvmexpensetrackerapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvI04sQdqccOmmB43K1inIObof6nKVKQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065208923378:android:4c21d311c0bb767d5e7c6b",
+        "android_client_info": {
+          "package_name": "com.rkcoding.expensetrackerapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvI04sQdqccOmmB43K1inIObof6nKVKQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
