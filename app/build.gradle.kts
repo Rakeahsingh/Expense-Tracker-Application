@@ -119,4 +119,7 @@ dependencies {
     //work
     //noinspection UseTomlInstead
     implementation("androidx.work:work-runtime-ktx:2.9.0")
+
+    // coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }

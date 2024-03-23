@@ -2,6 +2,14 @@ package com.rkcoding.expensetrackerapplication.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val Purple80 = Color(0xFFD0BCFF)
+val PurpleGrey80 = Color(0xFFCCC2DC)
+val Pink80 = Color(0xFFEFB8C8)
+
+val Purple40 = Color(0xFF6650a4)
+val PurpleGrey40 = Color(0xFF625b71)
+val Pink40 = Color(0xFF7D5260)
+
 val LightBlue500 = Color(0xFF03A9F4)
 val Grey100 = Color(0xFFF5F5F5)
 val DeepPurple900 = Color(0xFF311B92)
@@ -36,3 +44,5 @@ val electricBg = Color(0xFFB8F3FF)
 val homeBg = Color(0xFFFFC0BE)
 val schBg = Color(0xFF7F95D1)
 val groceryBg = Color(0xFF61C9A8)
+
+val purple = Color(0xFF6733C4)

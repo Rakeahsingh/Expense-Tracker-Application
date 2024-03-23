@@ -1,4 +1,4 @@
-package com.rkcoding.expensetrackerapplication.app_features.presentation.login_screen
+package com.rkcoding.expensetrackerapplication.app_features.presentation.userAuthentication.login_screen
 
 data class LoginState(
     val logInSuccess: Boolean = false,
