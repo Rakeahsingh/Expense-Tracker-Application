@@ -11,22 +11,24 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-//noinspection UsingMaterialAndMaterial3Libraries
-import androidx.compose.material.Divider
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,22 +43,49 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.rkcoding.expensetrackerapplication.core.UiEvent
 import com.rkcoding.expensetrackerapplication.core.navigation.Screen
 import com.rkcoding.expensetrackerapplication.ui.theme.purple
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
 
-    // check password visiblity
+    val state by viewModel.state.collectAsState()
+
+    // check password visible
     var isPasswordVisible by remember {
         mutableStateOf(false)
     }
+
+    // snackBar state
+    val snackBarState = remember {
+        SnackbarHostState()
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.uiEvent.collectLatest { event ->
+            when(event){
+                UiEvent.NavigateTo -> navController.navigate(Screen.HomeScreen.route)
+                is UiEvent.ShowSnackBar -> {
+                    snackBarState.showSnackbar(
+                        message = event.message,
+                        duration = event.duration
+                    )
+                }
+            }
+        }
+    }
     
-    Scaffold {
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackBarState) }
+    ){
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -89,8 +118,10 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(80.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = { },
+                value = state.userEmail,
+                onValueChange = { email ->
+                     viewModel.onEvent(LoginEvent.OnEmailValueChange(email))
+                },
                 label = {
                     Text(text = "Enter Email")
                 },
@@ -110,8 +141,10 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(10.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = { },
+                value = state.userPassword,
+                onValueChange = { password ->
+                     viewModel.onEvent(LoginEvent.OnPasswordValueChange(password))
+                },
                 label = {
                     Text(text = "Enter Password")
                 },
@@ -144,7 +177,7 @@ fun LoginScreen(
 
             Button(
                 onClick = {
-//                    navController.navigate(Screen.LogInScreen.route)
+                    viewModel.onEvent(LoginEvent.LogInButtonClick)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = purple,
@@ -168,11 +201,11 @@ fun LoginScreen(
                     .padding(horizontal = 50.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Divider(modifier = Modifier.weight(1f))
+                HorizontalDivider(modifier = Modifier.weight(1f))
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(text = "or", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.width(4.dp))
-                Divider(modifier = Modifier.weight(1f))
+                HorizontalDivider(modifier = Modifier.weight(1f))
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -228,7 +261,7 @@ fun LoginScreen(
 
 @Preview
 @Composable
-fun HEllo() {
+fun Hello() {
     LoginScreen(navController = rememberNavController())
 }
 

@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.rkcoding.expensetrackerapplication.core.navigation.MainNavigation
 import com.rkcoding.expensetrackerapplication.ui.theme.ExpenseTrackerApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-
+                    MainNavigation()
 
 
                 }
