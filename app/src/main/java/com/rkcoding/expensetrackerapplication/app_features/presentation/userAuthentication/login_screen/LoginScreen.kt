@@ -91,14 +91,14 @@ fun LoginScreen(
 
     // google login Launcher
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
+        contract = ActivityResultContracts.StartIntentSenderForResult(),
         onResult = { result ->
-            if (result.resultCode == Activity.RESULT_OK){
+            if(result.resultCode == Activity.RESULT_OK) {
                 scope.launch {
-                    val sinInResult = googleAuthClient.signInWithIntent(
+                    val signInResult = googleAuthClient.signInWithIntent(
                         intent = result.data ?: return@launch
                     )
-                    viewModel.onEvent(LoginEvent.GoogleLoginButtonClick(sinInResult))
+                    viewModel.onEvent(LoginEvent.GoogleLoginButtonClick(signInResult))
                 }
             }
         }
@@ -254,7 +254,7 @@ fun LoginScreen(
                                 .Builder(
                                     sinInIntentSender ?: return@launch
                                 )
-                                .build().fillInIntent
+                                .build()
                         )
                     }
                 },
