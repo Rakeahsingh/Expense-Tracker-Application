@@ -9,6 +9,6 @@ sealed class UiEvent {
         val duration: SnackbarDuration = SnackbarDuration.Short
     ): UiEvent()
 
-    data object NavigateTo: UiEvent()
+    data class NavigateTo(val route: String): UiEvent()
 
 }

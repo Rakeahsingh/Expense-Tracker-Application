@@ -1,5 +1,9 @@
 package com.rkcoding.expensetrackerapplication.app_features.presentation.userAuthentication.login_screen
 
+import android.app.Activity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,10 +36,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -46,10 +52,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.auth.api.identity.Identity
+import com.rkcoding.expensetrackerapplication.app_features.presentation.userAuthentication.component.GoogleAuthUiClient
 import com.rkcoding.expensetrackerapplication.core.UiEvent
 import com.rkcoding.expensetrackerapplication.core.navigation.Screen
 import com.rkcoding.expensetrackerapplication.ui.theme.purple
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -58,6 +67,9 @@ fun LoginScreen(
 ) {
 
     val state by viewModel.state.collectAsState()
+
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     // check password visible
     var isPasswordVisible by remember {
@@ -69,10 +81,33 @@ fun LoginScreen(
         SnackbarHostState()
     }
 
+    // google Auth Client
+    val googleAuthClient by lazy {
+        GoogleAuthUiClient(
+            context = context,
+            oneTapClient = Identity.getSignInClient(context)
+        )
+    }
+
+    // google login Launcher
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = { result ->
+            if (result.resultCode == Activity.RESULT_OK){
+                scope.launch {
+                    val sinInResult = googleAuthClient.signInWithIntent(
+                        intent = result.data ?: return@launch
+                    )
+                    viewModel.onEvent(LoginEvent.GoogleLoginButtonClick(sinInResult))
+                }
+            }
+        }
+    )
+
     LaunchedEffect(key1 = Unit) {
         viewModel.uiEvent.collectLatest { event ->
             when(event){
-                UiEvent.NavigateTo -> navController.navigate(Screen.HomeScreen.route)
+                is UiEvent.NavigateTo -> event.route
                 is UiEvent.ShowSnackBar -> {
                     snackBarState.showSnackbar(
                         message = event.message,
@@ -212,7 +247,16 @@ fun LoginScreen(
 
             Button(
                 onClick = {
-//                    navController.navigate(Screen.SignUpScreen.route)
+                    scope.launch {
+                        val sinInIntentSender = googleAuthClient.signIn()
+                        launcher.launch(
+                            IntentSenderRequest
+                                .Builder(
+                                    sinInIntentSender ?: return@launch
+                                )
+                                .build().fillInIntent
+                        )
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,

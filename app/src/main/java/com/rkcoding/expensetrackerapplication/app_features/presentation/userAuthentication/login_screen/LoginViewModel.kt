@@ -1,10 +1,12 @@
 package com.rkcoding.expensetrackerapplication.app_features.presentation.userAuthentication.login_screen
 
+import android.util.Log
 import androidx.compose.material3.SnackbarDuration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rkcoding.expensetrackerapplication.app_features.domain.repository.UserAuthRepository
 import com.rkcoding.expensetrackerapplication.core.UiEvent
+import com.rkcoding.expensetrackerapplication.core.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,8 +33,6 @@ class LoginViewModel @Inject constructor(
 
             LoginEvent.LogInButtonClick -> logInWithEmail()
 
-            LoginEvent.LogInWithGoogleButtonClick -> TODO()
-
             is LoginEvent.OnEmailValueChange -> {
                 _state.update {
                     it.copy(
@@ -49,8 +49,40 @@ class LoginViewModel @Inject constructor(
                 }
             }
 
+            is LoginEvent.GoogleLoginButtonClick -> {
+                viewModelScope.launch {
+                    try {
+
+                        _state.update { it.copy(
+                            logInSuccess = event.result.data != null,
+                            logInError = event.result.errorMessage
+                        ) }
+
+                        _uiEvent.send(
+                            UiEvent.ShowSnackBar(
+                                message = "Google SignIn Successfully...",
+                                duration = SnackbarDuration.Short
+                            )
+                        )
+
+                        _uiEvent.send(
+                            UiEvent.NavigateTo(Screen.HomeScreen.route)
+                        )
+
+                    }catch (e: Exception){
+                        e.printStackTrace()
+                        _uiEvent.send(
+                            UiEvent.ShowSnackBar(
+                                message = "Google SignIn Failed...",
+                                duration = SnackbarDuration.Long
+                            )
+                        )
+                    }
+                }
+            }
         }
     }
+
 
     private fun logInWithEmail() {
         viewModelScope.launch {
@@ -62,7 +94,8 @@ class LoginViewModel @Inject constructor(
                     email = _state.value.userEmail,
                     password = _state.value.userPassword
                 )
-                    .onSuccess {
+                    .onSuccess { success ->
+                        Log.d("Login Success", "logInWithEmail: $success")
 
                         _state.update { it.copy(isLoading = false) }
 
@@ -73,7 +106,7 @@ class LoginViewModel @Inject constructor(
                             )
                         )
                         _uiEvent.send(
-                            UiEvent.NavigateTo
+                            UiEvent.NavigateTo(Screen.HomeScreen.route)
                         )
                     }
                     .onFailure { exception ->
@@ -82,11 +115,12 @@ class LoginViewModel @Inject constructor(
 
                         _uiEvent.send(
                             UiEvent.ShowSnackBar(
-                                message = "login Failed...${exception.message}",
+                                message = "login Failed with error...$exception",
                                 duration = SnackbarDuration.Long
                             )
                         )
                     }
+
 
             }catch (e: Exception){
                 _uiEvent.send(

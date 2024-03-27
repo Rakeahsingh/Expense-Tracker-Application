@@ -33,8 +33,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,16 +55,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.rkcoding.expensetrackerapplication.core.UiEvent
 import com.rkcoding.expensetrackerapplication.core.navigation.Screen
 import com.rkcoding.expensetrackerapplication.ui.theme.purple
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SignUpScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: SignupViewModel = hiltViewModel()
 ) {
+
+    val state by viewModel.state.collectAsState()
 
     // select image from gallery state
     var selectImageUri by remember { mutableStateOf<Uri?>(null) }
@@ -72,14 +82,34 @@ fun SignUpScreen(
         }
     )
 
+    // snackBar state
+    val snackBarState = remember { SnackbarHostState() }
+
     // password visible
     var isPasswordVisible by remember { mutableStateOf(false) }
 
     // confirm password visible
     var isConfirmPasswordVisible by remember { mutableStateOf(false) }
 
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.uiEvent.collectLatest { event ->
+            when(event){
+                is UiEvent.NavigateTo -> event.route
+                is UiEvent.ShowSnackBar -> {
+                    snackBarState.showSnackbar(
+                        message = event.message,
+                        duration = event.duration
+                    )
+                }
+            }
+        }
+    }
+
     
-    Scaffold {
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackBarState) }
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -131,8 +161,10 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = { },
+                value = state.userName,
+                onValueChange = { userName ->
+                     viewModel.onEvent(SignupEvent.OnNameValueChange(userName))
+                },
                 label = {
                     Text(text = "Enter Name")
                 },
@@ -152,8 +184,10 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(10.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = { },
+                value = state.userEmail,
+                onValueChange = { userEmail ->
+                     viewModel.onEvent(SignupEvent.OnEmailValueChange(userEmail))
+                },
                 label = {
                     Text(text = "Enter Email")
                 },
@@ -173,8 +207,10 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(10.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = { },
+                value = state.userPassword,
+                onValueChange = { userPassword ->
+                     viewModel.onEvent(SignupEvent.OnPasswordValueChange(userPassword))
+                },
                 label = {
                     Text(text = "Enter Password")
                 },
@@ -206,8 +242,10 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(10.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = { },
+                value = state.userConfirmPassword,
+                onValueChange = { userConfirmPassword ->
+                     viewModel.onEvent(SignupEvent.OnConfirmPasswordValueChange(userConfirmPassword))
+                },
                 label = {
                     Text(text = "Enter Confirm Password")
                 },
@@ -240,7 +278,7 @@ fun SignUpScreen(
 
             Button(
                 onClick = {
-//                    navController.navigate(Screen.LogInScreen.route)
+                    viewModel.onEvent(SignupEvent.OnSignupButtonClick)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = purple,
