@@ -17,7 +17,6 @@ import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
 
 class GoogleAuthUiClient(
-    private val context: Context,
     private val oneTapClient: SignInClient
 ) {
 
@@ -55,7 +54,7 @@ class GoogleAuthUiClient(
                         userName = displayName,
                         userEmail = email,
                         userPassword = "",
-                        userImage = photoUrl.toString()
+                        userImage = photoUrl
                     )
                 },
                 errorMessage = null
@@ -78,7 +77,7 @@ class GoogleAuthUiClient(
             userName = displayName,
             userEmail = email,
             userPassword = "",
-            userImage = photoUrl.toString()
+            userImage = photoUrl
         )
     }
 

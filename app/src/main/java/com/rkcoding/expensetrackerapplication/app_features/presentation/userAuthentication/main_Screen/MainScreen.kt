@@ -62,7 +62,7 @@ fun MainScreen(
             text = "Best place to Record and Track your Transactions",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.LightGray,
+            color = Color.Gray,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )

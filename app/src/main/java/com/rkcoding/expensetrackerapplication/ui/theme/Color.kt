@@ -46,3 +46,4 @@ val schBg = Color(0xFF7F95D1)
 val groceryBg = Color(0xFF61C9A8)
 
 val purple = Color(0xFF6733C4)
+val Green = Color(0xFF219425)

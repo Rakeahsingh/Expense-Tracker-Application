@@ -1,7 +1,9 @@
 package com.rkcoding.expensetrackerapplication.app_features.presentation.userAuthentication.signup_screen
 
+import android.app.Activity
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -42,12 +44,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -59,10 +63,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.google.android.gms.auth.api.identity.Identity
+import com.rkcoding.expensetrackerapplication.app_features.presentation.userAuthentication.component.GoogleAuthUiClient
+import com.rkcoding.expensetrackerapplication.app_features.presentation.userAuthentication.login_screen.LoginEvent
 import com.rkcoding.expensetrackerapplication.core.UiEvent
 import com.rkcoding.expensetrackerapplication.core.navigation.Screen
 import com.rkcoding.expensetrackerapplication.ui.theme.purple
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpScreen(
@@ -71,6 +79,31 @@ fun SignUpScreen(
 ) {
 
     val state by viewModel.state.collectAsState()
+
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    // google Auth Client
+    val googleAuthClient by lazy {
+        GoogleAuthUiClient(
+            oneTapClient = Identity.getSignInClient(context)
+        )
+    }
+
+    // google login Launcher
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult(),
+        onResult = { result ->
+            if(result.resultCode == Activity.RESULT_OK) {
+                scope.launch {
+                    val signInResult = googleAuthClient.signInWithIntent(
+                        intent = result.data ?: return@launch
+                    )
+                    viewModel.onEvent(SignupEvent.OnGoogleButtonClick(signInResult))
+                }
+            }
+        }
+    )
 
     // select image from gallery state
     var selectImageUri by remember { mutableStateOf<Uri?>(null) }
@@ -92,10 +125,10 @@ fun SignUpScreen(
     var isConfirmPasswordVisible by remember { mutableStateOf(false) }
 
 
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collectLatest { event ->
             when(event){
-                is UiEvent.NavigateTo -> event.route
+                is UiEvent.NavigateTo -> navController.navigate(event.route)
                 is UiEvent.ShowSnackBar -> {
                     snackBarState.showSnackbar(
                         message = event.message,
@@ -133,7 +166,7 @@ fun SignUpScreen(
                 text = "Create a new Account...",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.LightGray,
+                color = Color.Gray,
                 textAlign = TextAlign.Start
             )
 
@@ -313,7 +346,14 @@ fun SignUpScreen(
 
             Button(
                 onClick = {
-//                    navController.navigate(Screen.SignUpScreen.route)
+                       scope.launch {
+                           val sinInIntentSender = googleAuthClient.signIn()
+                           launcher.launch(
+                               IntentSenderRequest.Builder(
+                                   sinInIntentSender ?: return@launch
+                               ).build()
+                           )
+                       }
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,

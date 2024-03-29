@@ -1,5 +1,6 @@
 package com.rkcoding.expensetrackerapplication.app_features.data.repository
 
+import android.net.Uri
 import androidx.core.net.toUri
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -31,7 +32,7 @@ class UserAuthRepositoryImpl(
                         userName = user.displayName,
                         userEmail = user.email,
                         userPassword = "",
-                        userImage = user.photoUrl.toString()
+                        userImage = user.photoUrl
                     )
                 )
             }else{
@@ -57,7 +58,7 @@ class UserAuthRepositoryImpl(
         name: String,
         email: String,
         password: String,
-        profileImage: String?
+        profileImage: Uri?
     ): Result<String> {
 
         return try {
@@ -69,7 +70,7 @@ class UserAuthRepositoryImpl(
                 val profileInfoBuilder = UserProfileChangeRequest.Builder()
                     .setDisplayName(name)
                 if (profileImage != null){
-                    profileInfoBuilder.photoUri = profileImage.toUri()
+                    profileInfoBuilder.photoUri = profileImage
                 }
                 val profileInfo = profileInfoBuilder.build()
 

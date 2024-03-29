@@ -7,6 +7,7 @@ import com.rkcoding.expensetrackerapplication.app_features.domain.repository.Use
 import com.rkcoding.expensetrackerapplication.core.UiEvent
 import com.rkcoding.expensetrackerapplication.core.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -60,7 +61,37 @@ class SignupViewModel @Inject constructor(
                 }
             }
 
-            SignupEvent.OnGoogleLoginButtonClick -> TODO()
+            is SignupEvent.OnGoogleButtonClick -> {
+                viewModelScope.launch {
+                    try {
+
+                        _state.update { it.copy(
+                            isSignupSuccess = event.result.data != null,
+                            isErrorMessage = event.result.errorMessage
+                        ) }
+
+                        _uiEvent.send(
+                            UiEvent.ShowSnackBar(
+                                message = "Google SignIn Successfully...",
+                                duration = SnackbarDuration.Short
+                            )
+                        )
+
+                        _uiEvent.send(
+                            UiEvent.NavigateTo(Screen.HomeScreen.route)
+                        )
+
+                    }catch (e: Exception){
+                        e.printStackTrace()
+                        _uiEvent.send(
+                            UiEvent.ShowSnackBar(
+                                message = "Google SignIn Failed...",
+                                duration = SnackbarDuration.Long
+                            )
+                        )
+                    }
+                }
+            }
 
         }
     }
@@ -86,8 +117,9 @@ class SignupViewModel @Inject constructor(
                     password = _state.value.userPassword,
                     profileImage = _state.value.userProfileImage
                 )
+
                     .onSuccess { success ->
-//                        _state.update { it.copy(isLoading = false) }
+                        _state.update { it.copy(isLoading = false) }
 
                         _uiEvent.send(
                             UiEvent.ShowSnackBar(

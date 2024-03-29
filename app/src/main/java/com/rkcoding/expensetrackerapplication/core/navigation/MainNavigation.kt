@@ -28,7 +28,9 @@ fun MainNavigation(
         }
 
         composable(Screen.LogInScreen.route){
-            LoginScreen(navController = navController)
+            LoginScreen(
+                navController = navController
+            )
         }
 
         composable(Screen.SignUpScreen.route){

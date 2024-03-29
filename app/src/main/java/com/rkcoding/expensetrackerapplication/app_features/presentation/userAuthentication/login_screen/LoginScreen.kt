@@ -77,14 +77,11 @@ fun LoginScreen(
     }
 
     // snackBar state
-    val snackBarState = remember {
-        SnackbarHostState()
-    }
+    val snackBarState = remember { SnackbarHostState() }
 
     // google Auth Client
     val googleAuthClient by lazy {
         GoogleAuthUiClient(
-            context = context,
             oneTapClient = Identity.getSignInClient(context)
         )
     }
@@ -104,10 +101,10 @@ fun LoginScreen(
         }
     )
 
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collectLatest { event ->
             when(event){
-                is UiEvent.NavigateTo -> event.route
+                is UiEvent.NavigateTo -> navController.navigate(event.route)
                 is UiEvent.ShowSnackBar -> {
                     snackBarState.showSnackbar(
                         message = event.message,
@@ -146,7 +143,7 @@ fun LoginScreen(
                 text = "Sign in to continue...",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.LightGray,
+                color = Color.Gray,
                 textAlign = TextAlign.Start
             )
 
@@ -196,7 +193,7 @@ fun LoginScreen(
                         onClick = { isPasswordVisible = !isPasswordVisible}
                     ) {
                        Icon(
-                           imageVector = if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                           imageVector = if (isPasswordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
                            contentDescription = "visible icon image"
                        )
                     }
@@ -303,10 +300,6 @@ fun LoginScreen(
 }
 
 
-@Preview
-@Composable
-fun Hello() {
-    LoginScreen(navController = rememberNavController())
-}
+
 
 
