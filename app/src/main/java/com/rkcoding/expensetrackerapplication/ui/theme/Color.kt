@@ -22,6 +22,7 @@ val Red500 = Color(0xFFf44336)
 val Red200 = Color(0xFFEF9A9A)
 val White = Color(0xFFFFFFFF)
 val Black = Color(0xFF000000)
+val LightBlack = Color(0xFF0F0F0F)
 
 val GridButtonWhite = Color(0xFFE2E7EF)
 val GridBorderGray = Color(0xFFBBCAD0)

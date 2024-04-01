@@ -23,7 +23,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -233,11 +233,11 @@ fun LoginScreen(
                     .padding(horizontal = 50.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                HorizontalDivider(modifier = Modifier.weight(1f))
+                Divider(modifier = Modifier.weight(1f))
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(text = "or", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.width(4.dp))
-                HorizontalDivider(modifier = Modifier.weight(1f))
+                Divider(modifier = Modifier.weight(1f))
             }
 
             Spacer(modifier = Modifier.height(8.dp))

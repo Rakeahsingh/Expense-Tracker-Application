@@ -1,10 +1,10 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id("dagger.hilt.android.plugin")
+    alias(libs.plugins.daggerHilt)
     id("kotlin-kapt")
     id ("kotlin-parcelize")
-    id("com.google.gms.google-services")
+    alias(libs.plugins.googleServices)
 }
 
 android {
@@ -72,55 +72,45 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // material icons
-    implementation("androidx.compose.material:material-icons-extended:1.6.3")
+    implementation(libs.androidx.material3.icons.extended)
 
-
-    // Material 3
-    implementation("androidx.compose.material3:material3:1.2.1")
 
     // Room
-    implementation("androidx.room:room-runtime:2.6.1")
-    annotationProcessor("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
-    implementation ("androidx.room:room-paging:2.6.1")
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.kapt.compiler)
+    implementation (libs.androidx.room.paging)
 
-    // Dragger Hilt
-    implementation("com.google.dagger:hilt-android:2.49")
-    kapt("com.google.dagger:hilt-android-compiler:2.49")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    // Dagger Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // compose Navigation
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation(libs.androidx.navigation.compose)
 
 
     // ViewModel Lifecycle
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     // firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-auth:22.3.1")
-    implementation("com.google.android.gms:play-services-auth:21.0.0")
+    implementation(libs.firebase.bom)
+    implementation(libs.firebase.auth)
+    implementation(libs.play.services.auth)
 
     // datastore preferences
-    //noinspection UseTomlInstead
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation(libs.androidx.datastore.preferences)
 
     // Pager and Indicators - Accompanist
-    //noinspection UseTomlInstead
-    implementation ("com.google.accompanist:accompanist-pager:0.19.0")
-    implementation ("com.google.accompanist:accompanist-pager-indicators:0.19.0")
-    implementation ("com.google.accompanist:accompanist-flowlayout:0.19.0")
+    implementation (libs.accompanist.pager)
+    implementation (libs.accompanist.pager.indicators)
+    implementation (libs.accompanist.flowlayout)
 
-    // Compose Constraint Layout
-    //noinspection UseTomlInstead
-    implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
     //work
-    //noinspection UseTomlInstead
-    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation(libs.androidx.work.runtime.ktx)
 
     // coil
-    implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation(libs.coil.compose)
 }
