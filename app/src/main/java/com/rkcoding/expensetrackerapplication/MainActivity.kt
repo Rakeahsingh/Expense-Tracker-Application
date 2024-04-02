@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.firebase.auth.FirebaseAuth
 import com.rkcoding.expensetrackerapplication.core.navigation.MainNavigation
+import com.rkcoding.expensetrackerapplication.core.navigation.MainNavigationScreen
 import com.rkcoding.expensetrackerapplication.ui.theme.ExpenseTrackerApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -33,7 +34,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    MainNavigation(firebaseAuth = firebaseAuth)
+//                    MainNavigation(firebaseAuth = firebaseAuth
+                    MainNavigationScreen(firebaseAuth = firebaseAuth)
 
 
                 }

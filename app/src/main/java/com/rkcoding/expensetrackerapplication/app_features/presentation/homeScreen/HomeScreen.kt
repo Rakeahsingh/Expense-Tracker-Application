@@ -1,7 +1,6 @@
 package com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,12 +15,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Segment
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Segment
 import androidx.compose.material.icons.filled.VerticalAlignBottom
 import androidx.compose.material.icons.filled.VerticalAlignTop
 import androidx.compose.material3.Icon
@@ -34,11 +34,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,22 +45,20 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.google.android.gms.auth.api.identity.Identity
-import com.rkcoding.expensetrackerapplication.R
+import com.rkcoding.expensetrackerapplication.app_features.domain.model.Transaction
 import com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen.component.TabButton
+import com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen.component.TransactionItem
 import com.rkcoding.expensetrackerapplication.app_features.presentation.userAuthentication.component.GoogleAuthUiClient
 import com.rkcoding.expensetrackerapplication.core.navigation.Screen
 import com.rkcoding.expensetrackerapplication.ui.theme.Black
-import com.rkcoding.expensetrackerapplication.ui.theme.Green
-import com.rkcoding.expensetrackerapplication.ui.theme.food_drink
-import com.rkcoding.expensetrackerapplication.ui.theme.purple
-import com.rkcoding.expensetrackerapplication.ui.theme.schBg
-import com.rkcoding.expensetrackerapplication.ui.theme.subBg
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
     navController: NavController
 ) {
+
+
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -96,7 +92,7 @@ fun HomeScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 24.dp, start = 16.dp, end = 12.dp),
+                            .padding(top = 24.dp, start = 16.dp, end = 16.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -384,138 +380,16 @@ fun HomeScreen(
             }
 
             // dummy transaction
+            TransactionItem()
+            TransactionItem()
+            TransactionItem()
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color.Gray.copy(alpha = 0.5f))
-            ){
-                Column (
-                    modifier = Modifier.padding(vertical = 8.dp)
-                ){
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 12.dp, end = 12.dp)
-                    ) {
-                        Text(text = "School")
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = "Bank")
-                    }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Row (
-                        modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 12.dp, end = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        Box(modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)){
-                            Image(painter = painterResource(id = R.drawable.bank),
-                                contentDescription = "bank" )
-                        }
+//            LazyColumn {
+//                items(transactionItem){ item ->
+//
+//                }
+//            }
 
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Text(text = "College Fess")
-                            Text(text = "INR 1,50,000")
-                        }
-                    }
-                }
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color.Gray.copy(alpha = 0.5f))
-            ){
-                Column (
-                    modifier = Modifier.padding(vertical = 8.dp)
-                ){
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 12.dp, end = 12.dp)
-                    ) {
-                        Text(text = "School")
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = "Bank")
-                    }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Row (
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 12.dp, end = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        Box(modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)){
-                            Image(painter = painterResource(id = R.drawable.bank),
-                                contentDescription = "bank" )
-                        }
-
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Text(text = "College Fess")
-                            Text(text = "INR 1,50,000")
-                        }
-                    }
-                }
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color.Gray.copy(alpha = 0.5f))
-            ){
-                Column (
-                    modifier = Modifier.padding(vertical = 8.dp)
-                ){
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 12.dp, end = 12.dp)
-                    ) {
-                        Text(text = "School")
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = "Bank")
-                    }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Row (
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 12.dp, end = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        Box(modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)){
-                            Image(painter = painterResource(id = R.drawable.bank),
-                                contentDescription = "bank" )
-                        }
-
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Text(text = "College Fess")
-                            Text(text = "INR 1,50,000")
-                        }
-                    }
-                }
-            }
 
 
 

@@ -8,6 +8,14 @@ sealed class Screen(val route: String){
 
     data object SignUpScreen: Screen("signup screen")
 
-    data object HomeScreen: Screen("home screen")
+    data object WelcomeScreen: Screen("welcome_screen")
+
+    data object HomeScreen: Screen("home_screen")
+
+    data object TransactionChartScreen: Screen("transaction_chart_screen")
+
+    data object AccountScreen: Screen("account_screen")
+
+    data object SettingScreen: Screen("setting_screen")
 
 }
