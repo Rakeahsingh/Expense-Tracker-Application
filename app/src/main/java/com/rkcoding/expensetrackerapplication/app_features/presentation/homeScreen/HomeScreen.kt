@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -24,6 +22,8 @@ import androidx.compose.material.icons.automirrored.filled.Segment
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.VerticalAlignBottom
 import androidx.compose.material.icons.filled.VerticalAlignTop
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,12 +45,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.google.android.gms.auth.api.identity.Identity
-import com.rkcoding.expensetrackerapplication.app_features.domain.model.Transaction
 import com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen.component.TabButton
 import com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen.component.TransactionItem
 import com.rkcoding.expensetrackerapplication.app_features.presentation.userAuthentication.component.GoogleAuthUiClient
 import com.rkcoding.expensetrackerapplication.core.navigation.Screen
-import com.rkcoding.expensetrackerapplication.ui.theme.Black
 import kotlinx.coroutines.launch
 
 @Composable
@@ -84,7 +82,7 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .height(300.dp)
                     .clip(RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
-                    .background(Black)
+                    .background(MaterialTheme.colorScheme.primary)
             ){
 
                 Column {
@@ -216,12 +214,15 @@ fun HomeScreen(
                     ) {
 
                         // income box layout
-                        Box(
+                        Card(
                             modifier = Modifier
                                 .width(150.dp)
                                 .height(100.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(Color.White)
+                                .clip(RoundedCornerShape(12.dp)),
+//                                .background(MaterialTheme.colorScheme.onPrimary),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.75f)
+                            )
                         ){
                             Column(
                                 modifier = Modifier.fillMaxSize(),
@@ -259,7 +260,7 @@ fun HomeScreen(
                                 ) {
                                     Text(
                                         text = "INR",
-                                        color = Color.DarkGray,
+                                        color = Color.White,
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight.Bold
                                     )
@@ -268,7 +269,7 @@ fun HomeScreen(
 
                                     Text(
                                         text = "10,000",
-                                        color = Color.Gray,
+                                        color = Color.White,
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold
                                     )
@@ -278,12 +279,15 @@ fun HomeScreen(
                         }
 
                         // expense box layout
-                        Box(
+                        Card(
                             modifier = Modifier
                                 .width(150.dp)
                                 .height(100.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(Color.White)
+                                .clip(RoundedCornerShape(12.dp)),
+//                                .background(Color.White)
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.75f)
+                            )
                         ){
                             Column(
                                 modifier = Modifier.fillMaxSize(),
@@ -321,7 +325,7 @@ fun HomeScreen(
                                 ) {
                                     Text(
                                         text = "INR",
-                                        color = Color.DarkGray,
+                                        color = Color.White,
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight.Bold
                                     )
@@ -330,7 +334,7 @@ fun HomeScreen(
 
                                     Text(
                                         text = "10,000",
-                                        color = Color.Gray,
+                                        color = Color.White,
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold
                                     )

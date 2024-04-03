@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.rkcoding.expensetrackerapplication.ui.theme.LightBlack
@@ -40,7 +41,7 @@ fun TabButton(
     Surface(
         modifier = Modifier
             .padding(top = 4.dp, start = 16.dp, end = 16.dp),
-        color = Color.Gray.copy(alpha = 0.5f),
+        color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f),
         shape = RoundedCornerShape(cornerRadius)
     ){
 
@@ -54,15 +55,15 @@ fun TabButton(
 
             tabs.forEach { tab ->
                 val backGroundColor by animateColorAsState(
-                    if (selectedTabButton == tab) LightBlack
+                    if (selectedTabButton == tab) MaterialTheme.colorScheme.primary
                     else Color.Transparent,
                     animationSpec = tween(500, easing = LinearOutSlowInEasing),
                     label = "backGround color"
                 )
 
                 val textColor by animateColorAsState(
-                    if (selectedTabButton == tab) MaterialTheme.colors.surface
-                    else MaterialTheme.colors.onSurface,
+                    if (selectedTabButton == tab) Color.White
+                    else Color.Black,
                     animationSpec = tween(500, easing = LinearOutSlowInEasing),
                     label = "backGround color"
                 )
@@ -85,7 +86,8 @@ fun TabButton(
                 ) {
                     Text(
                         text = tab.title,
-                        style = MaterialTheme.typography.subtitle2,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .padding(
                                 vertical = 4.dp,

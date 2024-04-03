@@ -44,7 +44,7 @@ fun TransactionItem(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(20.dp))
-            .background(Color.Gray.copy(alpha = 0.5f))
+            .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
     ){
         Column (
             modifier = Modifier.padding(vertical = 8.dp)
@@ -96,7 +96,8 @@ fun TransactionItem(
 //                    if (transaction.transactionTitle.isNotBlank()){
                         Text(
                             text = "College Fess",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1
                         )
