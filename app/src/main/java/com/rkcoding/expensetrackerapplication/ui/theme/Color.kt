@@ -1,5 +1,6 @@
 package com.rkcoding.expensetrackerapplication.ui.theme
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -113,3 +114,13 @@ val md_theme_dark_scrim = Color(0xFF000000)
 
 
 val seed = Color(0xFFD4BCF5)
+
+val incomeGradient = Brush.horizontalGradient(
+    0.0f to GreenAlpha700,
+    0.95f to Green200
+)
+
+val expenseGradient = Brush.horizontalGradient(
+    0.0f to Red500,
+    0.95f to Red200
+)

@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.firebase.auth.FirebaseAuth
 import com.rkcoding.expensetrackerapplication.app_features.presentation.accountsScreen.AccountsScreen
+import com.rkcoding.expensetrackerapplication.app_features.presentation.addTransactionScreen.AddTransactionScreen
 import com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen.HomeScreen
 import com.rkcoding.expensetrackerapplication.app_features.presentation.settingScreen.SettingScreen
 import com.rkcoding.expensetrackerapplication.app_features.presentation.transactionChartScreen.TransactionChartScreen
@@ -17,16 +18,17 @@ import com.rkcoding.expensetrackerapplication.app_features.presentation.welcomeS
 @Composable
 fun MainNavigation(
     firebaseAuth: FirebaseAuth,
-    navController: NavHostController
+    navController: NavHostController,
+    startDestination: String
 ) {
 
-    val hasUser = firebaseAuth.currentUser?.uid
+//    val hasUser = firebaseAuth.currentUser?.uid
 
 //    val navController = rememberNavController()
 
     NavHost(
         navController = navController,
-        startDestination = if (hasUser != null) Screen.HomeScreen.route else Screen.MainScreen.route
+        startDestination = startDestination
     ){
         composable(Screen.MainScreen.route){
             MainScreen(navController = navController)
@@ -48,6 +50,10 @@ fun MainNavigation(
 
         composable(Screen.HomeScreen.route){
             HomeScreen(navController = navController)
+        }
+
+        composable(Screen.AddTransactionScreen.route){
+            AddTransactionScreen(navController = navController)
         }
 
         composable(Screen.TransactionChartScreen.route){

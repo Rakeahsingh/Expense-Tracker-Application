@@ -44,7 +44,7 @@ fun BottomBarItem(
         ) {
 
             Icon(
-                imageVector = item.icon,
+                imageVector = if (isSelected) item.selectedIcon else item.unSelectedIcon,
                 contentDescription = "icon images",
                 tint = contentColor
             )
