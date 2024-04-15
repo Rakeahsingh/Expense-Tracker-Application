@@ -2,8 +2,10 @@ package com.rkcoding.expensetrackerapplication.core.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 import com.rkcoding.expensetrackerapplication.app_features.presentation.accountsScreen.AccountsScreen
 import com.rkcoding.expensetrackerapplication.app_features.presentation.addTransactionScreen.AddTransactionScreen
@@ -52,8 +54,35 @@ fun MainNavigation(
             HomeScreen(navController = navController)
         }
 
-        composable(Screen.AddTransactionScreen.route){
-            AddTransactionScreen(navController = navController)
+        composable(
+            route = "${Screen.AddTransactionScreen.route}/{tag}?trxKey={trxKey}&trxPos={trxPos}&trxStatus={trxStatus}",
+            arguments = listOf(
+                navArgument("tag"){
+                    type = NavType.IntType
+                    defaultValue = 0
+                },
+                navArgument("trxKey"){
+                    type = NavType.StringType
+                    defaultValue = null
+                    nullable = true
+                },
+                navArgument("trxPos"){
+                    type = NavType.IntType
+                    defaultValue = -1
+                },
+                navArgument("trxStatus"){
+                    type = NavType.IntType
+                    defaultValue = -1
+                }
+            )
+        ){
+            AddTransactionScreen(
+                transactionTag = it.arguments?.getInt("tag"),
+                transactionDate = it.arguments?.getString("trxKey"),
+                transactionPos = it.arguments?.getInt("trxPos"),
+                transactionStatus = it.arguments?.getInt("trxStatus"),
+                navController = navController
+            )
         }
 
         composable(Screen.TransactionChartScreen.route){

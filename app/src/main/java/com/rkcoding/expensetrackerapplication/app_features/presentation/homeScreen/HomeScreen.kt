@@ -25,7 +25,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.VerticalAlignBottom
 import androidx.compose.material.icons.filled.VerticalAlignTop
-import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,12 +32,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberStandardBottomSheetState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,11 +47,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.google.android.gms.auth.api.identity.Identity
 import com.rkcoding.expensetrackerapplication.app_features.presentation.component.AddEntryChooser
@@ -66,8 +65,6 @@ fun HomeScreen(
     navController: NavController
 ) {
 
-
-
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -80,46 +77,41 @@ fun HomeScreen(
     val userInfoData = googleAuthClient.getSignedInUser()
 
     // bottom sheet state
-    val bottomSheetState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Hidden)
+    val bottomSheetState = rememberModalBottomSheetState()
+    var isBottomSheetOpen by remember { mutableStateOf(false) }
+
+
+    AddEntryChooser(
+        sheetState = bottomSheetState,
+        navController = navController,
+        isOpen = isBottomSheetOpen,
+        onDismiss = { isBottomSheetOpen = false }
     )
-
-
 
     Scaffold(
         floatingActionButton = {
-                FloatingActionButton(
-                    onClick = {
-                        scope.launch {
-                            bottomSheetState.bottomSheetState.partialExpand()
-                        }
-                    },
-                    backgroundColor = MaterialTheme.colorScheme.secondary,
-                    elevation = FloatingActionButtonDefaults.elevation(2.dp),
-                    shape = CircleShape,
+            FloatingActionButton(
+                onClick = {
+                    scope.launch {
+                        bottomSheetState.show()
+                        isBottomSheetOpen = true
+                    }
+                },
+                backgroundColor = MaterialTheme.colorScheme.primary,
+                elevation = FloatingActionButtonDefaults.elevation(2.dp),
+                shape = CircleShape,
 
-                    ) {
-                    androidx.compose.material.Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = "Add transaction",
-                        tint = MaterialTheme.colorScheme.background
-                    )
-                }
+                ) {
+                androidx.compose.material.Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = "Add transaction",
+                    tint = MaterialTheme.colorScheme.background
+                )
+            }
         },
-        floatingActionButtonPosition = androidx.compose.material3.FabPosition.End
+        floatingActionButtonPosition = androidx.compose.material3.FabPosition.Center
     ) { paddingValues ->
 
-        BottomSheetScaffold(
-            sheetContent = {
-                AddEntryChooser(
-                    bottomSheetScaffoldState = bottomSheetState,
-                    navController = navController
-                )
-            },
-            scaffoldState = bottomSheetState,
-            sheetPeekHeight = 0.dp,
-            contentColor = MaterialTheme.colorScheme.background
-        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -294,7 +286,7 @@ fun HomeScreen(
 
                                         Text(
                                             text = "Income",
-                                            color = Color.Black,
+                                            color = Color.White.copy(alpha = 0.5f),
                                             fontSize = 24.sp,
                                             fontWeight = FontWeight.Bold
                                         )
@@ -359,7 +351,7 @@ fun HomeScreen(
 
                                         Text(
                                             text = "Expense",
-                                            color = Color.Black,
+                                            color = Color.White.copy(alpha = 0.5f),
                                             fontSize = 24.sp,
                                             fontWeight = FontWeight.Bold
                                         )
@@ -447,8 +439,6 @@ fun HomeScreen(
 
 
             }
-        }
-
 
     }
 
@@ -456,8 +446,3 @@ fun HomeScreen(
 }
 
 
-@Preview
-@Composable
-private fun Hello() {
-    HomeScreen(navController = rememberNavController())
-}

@@ -124,3 +124,8 @@ val expenseGradient = Brush.horizontalGradient(
     0.0f to Red500,
     0.95f to Red200
 )
+
+val primaryGradient = Brush.horizontalGradient(
+    0.0f to md_theme_light_primary,
+    0.95f to seed
+)
