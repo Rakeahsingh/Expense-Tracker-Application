@@ -1,9 +1,12 @@
 package com.rkcoding.expensetrackerapplication.app_features.presentation.addTransactionScreen.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
@@ -14,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,11 +30,16 @@ import com.rkcoding.expensetrackerapplication.utils.Category
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CategoryChooser(
-    categories: Array<Category> = Category.entries.toTypedArray()
+    categories: List<Category> = Category.entries
 ) {
+
+    var selectedCategory by remember {
+        mutableStateOf(Category.FOOD_DRINK)
+    }
 
     FlowRow(
        maxItemsInEachRow = 3,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.padding(
             vertical = 8.dp,
             horizontal = 8.dp
@@ -38,7 +47,11 @@ fun CategoryChooser(
     ) {
 
         categories.forEach { category ->
-            CategoryTag(category = category)
+            CategoryTag(
+                category = category,
+                isSelected = category == selectedCategory,
+                onCategorySelected = { selectedCategory = it }
+            )
         }
 
     }
@@ -48,35 +61,36 @@ fun CategoryChooser(
 @Composable
 fun CategoryTag(
     category: Category,
+    isSelected: Boolean,
+    onCategorySelected: (Category) -> Unit,
     cornerRadius: Dp = 12.dp
 ) {
 
-    val selectedCategory by remember {
-        mutableStateOf(Category.FOOD_DRINK)
-    }
 
     TextButton(
-        onClick = { /*TODO*/ },
+        onClick = { onCategorySelected(category) },
         shape = RoundedCornerShape(cornerRadius),
         contentPadding = PaddingValues(
             vertical = 4.dp,
             horizontal = 8.dp
         ),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = if (selectedCategory == category) category.iconBgColor.copy(alpha = 0.95f)
-                             else MaterialTheme.colorScheme.surface,
-            contentColor = if (selectedCategory == category) category.iconColor
+            backgroundColor = if (isSelected) category.iconBgColor.copy(alpha = 0.95f)
+                             else MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+            contentColor = if (isSelected) category.iconColor
                              else MaterialTheme.colorScheme.surface
         )
     ) {
 
         Icon(
             painter = painterResource(
-                id = if (selectedCategory == category) category.icon
+                id = if (isSelected) category.icon
                       else R.drawable.add_cart
             ),
             contentDescription = category.title
         )
+
+        Spacer(modifier = Modifier.width(4.dp))
 
         Text(
             text = category.title,

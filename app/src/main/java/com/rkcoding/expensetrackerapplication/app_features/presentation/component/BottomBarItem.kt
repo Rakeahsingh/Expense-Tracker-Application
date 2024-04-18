@@ -29,17 +29,18 @@ fun BottomBarItem(
     val backGroundColor = if (isSelected) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f) else Color.Transparent
     val contentColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray
 
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(backGroundColor)
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-            .clickable { onItemClick() }
-    ){
+//    Box(
+//        modifier = Modifier
+//            .clip(RoundedCornerShape(12.dp))
+//            .background(backGroundColor)
+//            .padding(horizontal = 8.dp, vertical = 4.dp)
+//            .clickable { onItemClick() }
+//    ){
 
         Column(
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.clickable { onItemClick() }
         ) {
 
             Icon(
@@ -57,6 +58,6 @@ fun BottomBarItem(
 
         }
 
-    }
+//    }
 
 }

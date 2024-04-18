@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
@@ -16,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,17 +33,27 @@ import com.rkcoding.expensetrackerapplication.utils.Account
 
 @Composable
 fun AccountChooser(
-    accounts: Array<Account> = Account.entries.toTypedArray()
+    accounts: List<Account> = Account.entries
 ) {
 
+    var selectedAccount by remember {
+        mutableStateOf(Account.CASH)
+    }
+
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
        accounts.forEach { account ->
-           AccountTag(account = account)
+           AccountTag(
+               account = account,
+               isSelected = account == selectedAccount,
+               onAccountSelected = { selectedAccount = it }
+           )
        }
 
     }
@@ -50,34 +63,35 @@ fun AccountChooser(
 @Composable
 fun AccountTag(
     account: Account,
+    isSelected: Boolean,
+    onAccountSelected: (Account) -> Unit,
     cornerRadius: Dp = 12.dp
 ) {
 
-    val selectedAccount by remember {
-        mutableStateOf(Account.CASH)
-    }
+
 
     TextButton(
-        onClick = { /*TODO*/ },
+        onClick = { onAccountSelected(account) },
         shape = RoundedCornerShape(cornerRadius),
         contentPadding = PaddingValues(
             vertical = 4.dp,
             horizontal = 8.dp
         ),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = if (selectedAccount == account) GreenAlpha700.copy(alpha = 0.5f)
+            backgroundColor = if (isSelected) GreenAlpha700.copy(alpha = 0.5f)
                               else Color.Transparent,
-            contentColor = if (selectedAccount == account) Color.White
-                            else MaterialTheme.colorScheme.primary
+            contentColor = if (isSelected) Color.White
+                            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
         )
     ) {
 
         Icon(
-            painter = painterResource(id = if (selectedAccount == account) R.drawable.checked
+            painter = painterResource(id = if (isSelected) R.drawable.checked
                                             else account.iconRes
-            )
-            ,
-            contentDescription = account.title
+            ),
+            contentDescription = account.title,
+            modifier = Modifier.size(42.dp),
+            tint = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
         )
 
         Spacer(modifier = Modifier.width(4.dp))
@@ -85,7 +99,7 @@ fun AccountTag(
         Text(
             text = account.title,
             fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodyMedium
         )
 
     }
