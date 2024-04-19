@@ -5,6 +5,7 @@ coilCompose = "2.6.0"
 datastorePreferences = "1.0.0"
 firebaseAuth = "22.3.1"
 firebaseBom = "32.8.0"
+firebaseFirestore = "24.11.1"
 hiltAndroid = "2.49"
 hiltNavigationCompose = "1.2.0"
 kotlin = "1.9.0"
@@ -40,6 +41,7 @@ androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore", version.ref = "firebaseFirestore" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

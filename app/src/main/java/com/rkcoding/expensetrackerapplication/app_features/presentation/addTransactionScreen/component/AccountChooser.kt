@@ -15,6 +15,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,19 +27,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.rkcoding.expensetrackerapplication.R
+import com.rkcoding.expensetrackerapplication.app_features.presentation.addTransactionScreen.AddTransactionEvent
+import com.rkcoding.expensetrackerapplication.app_features.presentation.addTransactionScreen.AddTransactionViewModel
 import com.rkcoding.expensetrackerapplication.ui.theme.GreenAlpha700
 import com.rkcoding.expensetrackerapplication.utils.Account
 
 
 @Composable
 fun AccountChooser(
-    accounts: List<Account> = Account.entries
+    accounts: List<Account> = Account.entries,
+    viewModel: AddTransactionViewModel = hiltViewModel()
 ) {
 
-    var selectedAccount by remember {
-        mutableStateOf(Account.CASH)
-    }
+    val state by viewModel.state.collectAsState()
+
+//    var selectedAccount by remember {
+//        mutableStateOf(Account.CASH)
+//    }
 
     Row(
         modifier = Modifier
@@ -51,8 +58,10 @@ fun AccountChooser(
        accounts.forEach { account ->
            AccountTag(
                account = account,
-               isSelected = account == selectedAccount,
-               onAccountSelected = { selectedAccount = it }
+               isSelected = account == state.accountType,
+               onAccountSelected = {
+                   viewModel.onEvent(AddTransactionEvent.OnAccountTypeChange(it))
+               }
            )
        }
 

@@ -1,11 +1,11 @@
 package com.rkcoding.expensetrackerapplication.app_features.domain.model
 
-import java.util.Date
+
 
 data class Transaction(
-    val id: Int,
+    val transactionId: String,
     val transactionTitle: String,
-    val date: Date,
+    val date: String,
     val entryDate: String,
     val accountType: String,
     val transactionAmount: Double,

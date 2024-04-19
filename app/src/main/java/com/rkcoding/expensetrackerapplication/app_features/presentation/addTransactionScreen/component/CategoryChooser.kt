@@ -14,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,19 +24,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.rkcoding.expensetrackerapplication.R
+import com.rkcoding.expensetrackerapplication.app_features.presentation.addTransactionScreen.AddTransactionEvent
+import com.rkcoding.expensetrackerapplication.app_features.presentation.addTransactionScreen.AddTransactionViewModel
 import com.rkcoding.expensetrackerapplication.utils.Category
 
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CategoryChooser(
-    categories: List<Category> = Category.entries
+    categories: List<Category> = Category.entries,
+    viewModel: AddTransactionViewModel = hiltViewModel()
 ) {
 
-    var selectedCategory by remember {
-        mutableStateOf(Category.FOOD_DRINK)
-    }
+    val state by viewModel.state.collectAsState()
+
+//    var selectedCategory by remember {
+//        mutableStateOf(Category.FOOD_DRINK)
+//    }
 
     FlowRow(
        maxItemsInEachRow = 3,
@@ -49,8 +56,10 @@ fun CategoryChooser(
         categories.forEach { category ->
             CategoryTag(
                 category = category,
-                isSelected = category == selectedCategory,
-                onCategorySelected = { selectedCategory = it }
+                isSelected = category == state.category,
+                onCategorySelected = {
+                    viewModel.onEvent(AddTransactionEvent.OnCategoryChange(it))
+                }
             )
         }
 

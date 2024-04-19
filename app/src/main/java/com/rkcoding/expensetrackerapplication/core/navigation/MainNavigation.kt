@@ -1,5 +1,6 @@
 package com.rkcoding.expensetrackerapplication.core.navigation
 
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -28,6 +29,7 @@ fun MainNavigation(
 
 //    val navController = rememberNavController()
 
+
     NavHost(
         navController = navController,
         startDestination = startDestination
@@ -55,13 +57,13 @@ fun MainNavigation(
         }
 
         composable(
-            route = "${Screen.AddTransactionScreen.route}/{tag}?trxKey={trxKey}&trxPos={trxPos}&trxStatus={trxStatus}",
+            route = "${Screen.AddTransactionScreen.route}/{tag}?trxId={trxId}&trxPos={trxPos}&trxStatus={trxStatus}",
             arguments = listOf(
                 navArgument("tag"){
                     type = NavType.IntType
                     defaultValue = 0
                 },
-                navArgument("trxKey"){
+                navArgument("trxId"){
                     type = NavType.StringType
                     defaultValue = null
                     nullable = true
@@ -78,7 +80,7 @@ fun MainNavigation(
         ){
             AddTransactionScreen(
                 transactionTag = it.arguments?.getInt("tag"),
-                transactionDate = it.arguments?.getString("trxKey"),
+                transactionId = it.arguments?.getString("trxId"),
                 transactionPos = it.arguments?.getInt("trxPos"),
                 transactionStatus = it.arguments?.getInt("trxStatus"),
                 navController = navController
