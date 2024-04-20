@@ -111,8 +111,4 @@ fun MainScreen(
 
 }
 
-@Preview
-@Composable
-fun HEllo() {
-    MainScreen(navController = rememberNavController())
-}
+

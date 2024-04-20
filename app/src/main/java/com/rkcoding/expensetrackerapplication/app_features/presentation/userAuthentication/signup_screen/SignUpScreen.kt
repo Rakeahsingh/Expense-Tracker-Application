@@ -21,7 +21,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
@@ -56,16 +58,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.google.android.gms.auth.api.identity.Identity
 import com.rkcoding.expensetrackerapplication.app_features.presentation.userAuthentication.component.GoogleAuthUiClient
-import com.rkcoding.expensetrackerapplication.app_features.presentation.userAuthentication.login_screen.LoginEvent
 import com.rkcoding.expensetrackerapplication.core.UiEvent
 import com.rkcoding.expensetrackerapplication.core.navigation.Screen
 import com.rkcoding.expensetrackerapplication.ui.theme.purple
@@ -147,6 +146,7 @@ fun SignUpScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
+                .verticalScroll(rememberScrollState())
         ) {
             
             Text(
@@ -438,8 +438,3 @@ fun CircularImage(
 }
 
 
-@Preview
-@Composable
-fun Hello() {
-    SignUpScreen(navController = rememberNavController())
-}

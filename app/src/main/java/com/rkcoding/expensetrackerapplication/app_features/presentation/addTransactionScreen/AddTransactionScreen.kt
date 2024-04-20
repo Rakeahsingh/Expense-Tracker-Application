@@ -10,7 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ButtonDefaults
@@ -29,10 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -46,7 +42,6 @@ import com.rkcoding.expensetrackerapplication.app_features.presentation.addTrans
 import com.rkcoding.expensetrackerapplication.core.UiEvent
 import com.rkcoding.expensetrackerapplication.utils.TransactionType
 import kotlinx.coroutines.flow.collectLatest
-import kotlin.reflect.KProperty
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,7 +65,9 @@ fun AddTransactionScreen(
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collectLatest { event ->
             when(event){
-                is UiEvent.NavigateTo -> event.route
+                is UiEvent.NavigateTo -> {
+                    navController.navigate(event.route)
+                }
                 is UiEvent.ShowSnackBar -> {
                     scaffoldState.showSnackbar(
                         message = event.message,
@@ -111,7 +108,8 @@ fun AddTransactionScreen(
 
             OutlinedTextField(
                 value = state.transactionTitle,
-                onValueChange = { viewModel.onEvent(AddTransactionEvent.OnTransactionTitleChange(it)) },
+                onValueChange = { title ->
+                    viewModel.onEvent(AddTransactionEvent.OnTransactionTitleChange(title)) },
                 maxLines = 1,
                 singleLine = true,
                 label = { Text(text = "Enter Transaction Title") },
@@ -141,7 +139,8 @@ fun AddTransactionScreen(
 
             OutlinedTextField(
                 value = state.transactionAmount.toString(),
-                onValueChange = { viewModel.onEvent(AddTransactionEvent.OnTransactionAmountChane(it.toDouble())) },
+                onValueChange = { amount ->
+                    viewModel.onEvent(AddTransactionEvent.OnTransactionAmountChane(amount.toDouble())) },
                 maxLines = 1,
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(

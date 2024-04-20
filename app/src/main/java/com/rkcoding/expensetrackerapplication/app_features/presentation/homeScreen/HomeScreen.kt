@@ -425,9 +425,9 @@ fun HomeScreen(
                 }
 
                 // dummy transaction
-                TransactionItem()
-                TransactionItem()
-                TransactionItem()
+//                TransactionItem()
+//                TransactionItem()
+//                TransactionItem()
 
 //            LazyColumn {
 //                items(transactionItem){ item ->

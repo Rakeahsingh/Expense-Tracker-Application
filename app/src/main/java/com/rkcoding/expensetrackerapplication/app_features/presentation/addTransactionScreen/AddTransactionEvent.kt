@@ -10,6 +10,7 @@ sealed class AddTransactionEvent {
     data class OnAccountTypeChange(val account: Account): AddTransactionEvent()
 
     data class OnTransactionEntryDate(val entryDate: String): AddTransactionEvent()
+
     data class OnTransactionAmountChane(val transactionAmount: Double): AddTransactionEvent()
 
     data class OnCategoryChange(val category: Category): AddTransactionEvent()

@@ -55,14 +55,14 @@ class FirebaseTransactionRepositoryImpl(
                 val document = documents[0]
                 val transactionId = document.getString("transactionId") ?: return null
                 val transactionTitle = document.getString("transactionTitle") ?: ""
-                val date = document.getString("date") ?: ""
+//                val date = document.getString("date") ?: ""
                 val entryDate = document.getString("entryDate") ?: ""
                 val accountType = document.getString("accountType") ?: ""
                 val transactionAmount = document.getDouble("transactionAmount") ?: 0.0
                 val category = document.getString("category") ?: ""
                 val transactionType = document.getString("transactionType") ?: ""
 
-                return Transaction(transactionId, transactionTitle, date, entryDate, accountType, transactionAmount, category, transactionType)
+                return Transaction(transactionId, transactionTitle, entryDate, accountType, transactionAmount, category, transactionType)
 
             }else{
                 return null
@@ -103,7 +103,7 @@ class FirebaseTransactionRepositoryImpl(
                Transaction(
                    transactionId = document.getString("transactionId") ?: return@mapNotNull null,
                    transactionTitle = document.getString("transactionTitle") ?: "",
-                   date = document.getString("date") ?: "",
+//                   date = document.getString("date") ?: "",
                    entryDate = document.getString("entryDate") ?: "",
                    accountType = document.getString("accountType") ?: "",
                    transactionAmount = document.getDouble("transactionAmount") ?: 0.0,
@@ -133,14 +133,14 @@ class FirebaseTransactionRepositoryImpl(
 
                 val transactionId = document.getString("transactionId") ?: return@forEach
                 val transactionTitle = document.getString("transactionTitle") ?: ""
-                val date = document.getString("date") ?: ""
+//                val date = document.getString("date") ?: ""
                 val entryDate = document.getString("entryDate") ?: ""
                 val accountType = document.getString("accountType") ?: ""
                 val transactionAmount = document.getDouble("transactionAmount") ?: 0.0
                 val category = document.getString("category") ?: ""
                 val transactionType = document.getString("transactionType") ?: ""
 
-                val transaction = Transaction(transactionId, transactionTitle, date, entryDate, accountType, transactionAmount, category, transactionType)
+                val transaction = Transaction(transactionId, transactionTitle, entryDate, accountType, transactionAmount, category, transactionType)
                 transactions.add(transaction)
             }
             _transaction.value = transactions

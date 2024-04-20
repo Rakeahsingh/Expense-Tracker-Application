@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -109,7 +111,7 @@ class AddTransactionViewModel @Inject constructor(
                     Transaction(
                         transactionId = _state.value.transactionId,
                         transactionTitle = _state.value.transactionTitle,
-                        date = _state.value.date,
+//                        date = _state.value.date,
                         entryDate = _state.value.entryDate,
                         accountType = _state.value.accountType.toString(),
                         transactionAmount = _state.value.transactionAmount,
@@ -148,7 +150,7 @@ class AddTransactionViewModel @Inject constructor(
                     it.copy(
                         transactionId = transaction.transactionId,
                         transactionTitle = transaction.transactionTitle,
-                        date = transaction.date,
+//                        date = transaction.date,
                         entryDate = transaction.entryDate,
                         accountType = Account.valueOf(transaction.accountType),
                         transactionAmount = transaction.transactionAmount,

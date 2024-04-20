@@ -7,7 +7,6 @@ import com.rkcoding.expensetrackerapplication.app_features.domain.repository.Use
 import com.rkcoding.expensetrackerapplication.core.UiEvent
 import com.rkcoding.expensetrackerapplication.core.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -85,7 +84,7 @@ class SignupViewModel @Inject constructor(
                         e.printStackTrace()
                         _uiEvent.send(
                             UiEvent.ShowSnackBar(
-                                message = "Google SignIn Failed...",
+                                message = "Google SignIn Failed... ${e.message}",
                                 duration = SnackbarDuration.Long
                             )
                         )

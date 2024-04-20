@@ -29,15 +29,17 @@ import com.rkcoding.expensetrackerapplication.R
 import com.rkcoding.expensetrackerapplication.app_features.domain.model.Transaction
 import com.rkcoding.expensetrackerapplication.ui.theme.GreenAlpha700
 import com.rkcoding.expensetrackerapplication.ui.theme.LightBlue500
+import com.rkcoding.expensetrackerapplication.ui.theme.Red500
 import com.rkcoding.expensetrackerapplication.ui.theme.schBg
 import com.rkcoding.expensetrackerapplication.utils.Category
+import com.rkcoding.expensetrackerapplication.utils.TransactionType
 
 @Composable
 fun TransactionItem(
-//    transaction: Transaction
+    transaction: Transaction
 ) {
 
-//    val category = getCategory(transaction.category)
+    val category = getCategory(transaction.category)
 
     Box(
         modifier = Modifier
@@ -57,7 +59,7 @@ fun TransactionItem(
                     .padding(start = 12.dp, end = 12.dp)
             ) {
                 Text(
-                    text = "School",
+                    text = category.title,
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -65,7 +67,7 @@ fun TransactionItem(
                         .padding(vertical = 4.dp, horizontal = 8.dp))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Bank",
+                    text = transaction.accountType,
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -82,30 +84,30 @@ fun TransactionItem(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ){
                 Icon(
-                    painter = painterResource(id = R.drawable.bank),
+                    painter = painterResource(id = category.icon),
                     contentDescription = "account type icon",
                     tint = Color.Black,
                     modifier = Modifier
-                        .background(Color.DarkGray.copy(alpha = 0.2f), CircleShape)
+                        .background(category.iconBgColor.copy(alpha = 0.2f), CircleShape)
                         .padding(12.dp)
                     )
 
                 Column(
                     verticalArrangement = Arrangement.Center
                 ) {
-//                    if (transaction.transactionTitle.isNotBlank()){
+                    if (transaction.transactionTitle.isNotBlank()){
                         Text(
-                            text = "College Fess",
+                            text = transaction.transactionTitle,
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Bold,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1
                         )
-//                    }
+                    }
 
 
                     Text(
-                        text = "02 Apr 2024, 10:00AM",
+                        text = transaction.entryDate,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Light
                     )
@@ -115,7 +117,10 @@ fun TransactionItem(
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
-                    text = "+ 1,50,000", color = GreenAlpha700,
+                    text = if (transaction.accountType == TransactionType.INCOME.title) "+${transaction.transactionAmount}"
+                            else "-${transaction.transactionAmount}",
+                    color = if (transaction.accountType == TransactionType.INCOME.title) GreenAlpha700
+                            else Red500,
                     fontWeight = FontWeight.Bold
                 )
 

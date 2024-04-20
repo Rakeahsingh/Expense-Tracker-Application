@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.rkcoding.expensetrackerapplication.ui.theme.LightBlack
 import com.rkcoding.expensetrackerapplication.utils.TabButton
 
 @SuppressLint("SuspiciousIndentation")

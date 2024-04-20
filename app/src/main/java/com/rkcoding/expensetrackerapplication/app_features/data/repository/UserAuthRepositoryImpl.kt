@@ -1,7 +1,6 @@
 package com.rkcoding.expensetrackerapplication.app_features.data.repository
 
 import android.net.Uri
-import androidx.core.net.toUri
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthEmailException

@@ -7,8 +7,8 @@ import java.util.Date
 data class AddTransactionState(
     val transactionId: String = Date().time.toString(),
     val transactionTitle: String = "",
-    val date: String = "",
-    val entryDate: String = "",
+//    val date: String = "",
+    val entryDate: String = Date().time.toString(),
     val accountType: Account = Account.CASH,
     val transactionAmount: Double = 0.00,
     val category: Category = Category.FOOD_DRINK,

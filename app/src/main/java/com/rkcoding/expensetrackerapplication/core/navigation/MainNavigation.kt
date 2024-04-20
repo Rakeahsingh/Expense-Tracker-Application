@@ -1,6 +1,5 @@
 package com.rkcoding.expensetrackerapplication.core.navigation
 
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
