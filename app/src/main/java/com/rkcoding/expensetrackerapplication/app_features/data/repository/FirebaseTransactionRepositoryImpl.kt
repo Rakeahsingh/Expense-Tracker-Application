@@ -44,7 +44,7 @@ class FirebaseTransactionRepositoryImpl(
         try {
             val querySnapshot = fireStore.collection("users")
                 .document(userId)
-                .collection("transaction")
+                .collection("transactions")
                 .whereEqualTo("transactionId", id)
                 .get()
                 .await()
@@ -80,7 +80,7 @@ class FirebaseTransactionRepositoryImpl(
 
         val query = fireStore.collection("users")
             .document(userId)
-            .collection("transaction")
+            .collection("transactions")
             .whereEqualTo("transactionId", transactionId)
 
         query.get().addOnSuccessListener {
@@ -95,7 +95,7 @@ class FirebaseTransactionRepositoryImpl(
 
         return fireStore.collection("users")
             .document(userId)
-            .collection("transaction")
+            .collection("transactions")
             .get()
             .await()
             .documents
@@ -119,7 +119,7 @@ class FirebaseTransactionRepositoryImpl(
 
         val query = fireStore.collection("users")
             .document(userId)
-            .collection("transaction")
+            .collection("transactions")
 
         query.addSnapshotListener { querySnapshot, firebaseFireStoreException ->
             if (firebaseFireStoreException != null){
