@@ -1,5 +1,6 @@
 package com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen.component
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,12 +27,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rkcoding.expensetrackerapplication.app_features.domain.model.Transaction
+import com.rkcoding.expensetrackerapplication.core.Constant
 import com.rkcoding.expensetrackerapplication.ui.theme.GreenAlpha700
 import com.rkcoding.expensetrackerapplication.ui.theme.LightBlue500
 import com.rkcoding.expensetrackerapplication.ui.theme.Red500
 import com.rkcoding.expensetrackerapplication.ui.theme.schBg
 import com.rkcoding.expensetrackerapplication.utils.Category
 import com.rkcoding.expensetrackerapplication.utils.TransactionType
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun TransactionItem(
@@ -39,6 +47,9 @@ fun TransactionItem(
 ) {
 
     val category = getCategory(transaction.category)
+    val dateFormat = formatTimestamp(transaction.entryDate)
+//    val formattedDate = parsedDate?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) ?: "Invalid Date"
+
 
     Box(
         modifier = Modifier
@@ -58,7 +69,7 @@ fun TransactionItem(
                     .padding(start = 12.dp, end = 12.dp)
             ) {
                 Text(
-                    text = category.title,
+                    text = transaction.category,
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -106,7 +117,7 @@ fun TransactionItem(
 
 
                     Text(
-                        text = transaction.entryDate,
+                        text = dateFormat,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Light
                     )
@@ -116,9 +127,9 @@ fun TransactionItem(
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
-                    text = if (transaction.accountType == TransactionType.INCOME.title) "+${transaction.transactionAmount}"
+                    text = if (transaction.transactionType == TransactionType.INCOME.value.toString()) "+${transaction.transactionAmount}"
                             else "-${transaction.transactionAmount}",
-                    color = if (transaction.accountType == TransactionType.INCOME.title) GreenAlpha700
+                    color = if (transaction.transactionType == TransactionType.INCOME.value.toString()) GreenAlpha700
                             else Red500,
                     fontWeight = FontWeight.Bold
                 )
@@ -127,14 +138,47 @@ fun TransactionItem(
         }
     }
 
+
+
 }
 
+//fun getCategory(title: String): Category{
+//    var result: Category = Category.FOOD_DRINK
+//    Category.entries.forEach{ category ->
+//        if (category.title == title){
+//            result = category
+//        }
+//    }
+//    return result
+//}
+
+
 fun getCategory(title: String): Category{
-    var result: Category = Category.FOOD_DRINK
-    Category.entries.forEach{ category ->
-        if (category.title == title){
-            result = category
-        }
+    Log.d("categoryTitle", "getCategory: $title")
+    val category = Category.entries.find { it.title == title }
+
+    if (category != null){
+        Log.d("categoryTitleFound", "getCategoryTitle: ${category.title}")
+    }else{
+        Log.d("categoryTitle", "getCategoryTitle not found: $title")
     }
-    return result
+    return category ?:  Category.FOOD_DRINK
 }
+
+
+fun formatTimestamp(timestampString: String): String {
+    // Parse the timestamp string to a Long value
+    val timestamp = timestampString.toLong()
+
+    // Create a Date object from the timestamp
+    val date = Date(timestamp)
+
+    // Format the Date object into the desired date-time format
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss a", Locale.getDefault())
+    return dateFormat.format(date)
+}
+
+
+
+
+

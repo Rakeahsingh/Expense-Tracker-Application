@@ -2,8 +2,10 @@ package com.rkcoding.expensetrackerapplication.app_features.presentation.homeScr
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rkcoding.expensetrackerapplication.app_features.domain.model.Transaction
 import com.rkcoding.expensetrackerapplication.app_features.domain.repository.FirebaseTransactionRepository
 import com.rkcoding.expensetrackerapplication.core.UiEvent
+import com.rkcoding.expensetrackerapplication.utils.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -32,15 +34,8 @@ class HomeScreenViewModel @Inject constructor(
 
             repository.realTimeTransactionData()
 
-            _state.update { it.copy(isLoading = true) }
-            repository.transaction.collectLatest { transaction ->
-                _state.update {
-                    it.copy(
-                        transaction = transaction,
-                        isLoading = false
-                    )
-                }
-            }
+            getTransaction()
+
         }
     }
 
@@ -55,6 +50,39 @@ class HomeScreenViewModel @Inject constructor(
             }
         }
     }
+
+   private suspend fun getTransaction(){
+        _state.update { it.copy(isLoading = true) }
+        repository.transaction.collectLatest { transaction ->
+            _state.update {
+                it.copy(
+                    transaction = transaction,
+                    isLoading = false
+                )
+            }
+            calculateTotalAmounts(transaction)
+        }
+    }
+
+
+    private fun calculateTotalAmounts(transactions: List<Transaction>){
+        val totalIncome = transactions.filter { it.transactionType == TransactionType.INCOME.value.toString() }
+            .sumOf { it.transactionAmount }
+
+        val totalExpense = transactions.filter { it.transactionType == TransactionType.EXPENSE.value.toString() }
+            .sumOf { it.transactionAmount }
+
+        val totalBalance = totalIncome - totalExpense
+
+        _state.update {
+            it.copy(
+                totalBalance = totalBalance.toInt(),
+                totalIncome = totalIncome.toInt(),
+                totalExpense = totalExpense.toInt()
+            )
+        }
+    }
+
 
 
 }

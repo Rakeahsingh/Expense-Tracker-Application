@@ -73,6 +73,7 @@ fun HomeScreen(
 
     val state by viewModel.state.collectAsState()
 
+
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -434,7 +435,7 @@ fun HomeScreen(
 
 
                 LazyColumn {
-                    items(state.transaction) { transaction ->
+                    items(state.transaction.reversed()) { transaction ->
                         TransactionItem(transaction = transaction)
                     }
                 }
