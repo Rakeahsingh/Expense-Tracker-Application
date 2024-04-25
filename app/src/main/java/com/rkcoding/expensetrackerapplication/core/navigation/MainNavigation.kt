@@ -91,7 +91,9 @@ fun MainNavigation(
         }
 
         composable(Screen.AccountScreen.route){
-            AccountsScreen()
+            AccountsScreen(
+                navController = navController
+            )
         }
 
         composable(Screen.SettingScreen.route){

@@ -1,5 +1,6 @@
 package com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rkcoding.expensetrackerapplication.app_features.domain.model.Transaction
@@ -32,13 +33,14 @@ class HomeScreenViewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Main) {
 
             repository.realTimeTransactionData()
 
             getTransaction()
 
             useCase
+            Log.d("viewModel", "useCase: $useCase")
 
         }
     }
