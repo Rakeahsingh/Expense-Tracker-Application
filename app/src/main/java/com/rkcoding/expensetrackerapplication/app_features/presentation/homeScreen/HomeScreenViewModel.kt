@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rkcoding.expensetrackerapplication.app_features.domain.model.Transaction
 import com.rkcoding.expensetrackerapplication.app_features.domain.repository.FirebaseTransactionRepository
+import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetAccountDetails
 import com.rkcoding.expensetrackerapplication.core.UiEvent
 import com.rkcoding.expensetrackerapplication.utils.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val repository: FirebaseTransactionRepository
+    private val repository: FirebaseTransactionRepository,
+    private val useCase: GetAccountDetails
 ): ViewModel() {
 
     private val _state = MutableStateFlow(HomeScreenState())
@@ -35,6 +37,8 @@ class HomeScreenViewModel @Inject constructor(
             repository.realTimeTransactionData()
 
             getTransaction()
+
+            useCase
 
         }
     }

@@ -113,7 +113,7 @@ class AddTransactionViewModel @Inject constructor(
                         transactionTitle = _state.value.transactionTitle,
 //                        date = _state.value.date,
                         entryDate = _state.value.entryDate,
-                        accountType = _state.value.accountType.toString(),
+                        accountType = _state.value.accountType.title,
                         transactionAmount = _state.value.transactionAmount,
                         category = _state.value.category.toString(),
                         transactionType = transactionType.toString()

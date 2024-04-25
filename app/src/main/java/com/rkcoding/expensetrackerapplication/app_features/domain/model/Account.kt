@@ -1,7 +1,7 @@
 package com.rkcoding.expensetrackerapplication.app_features.domain.model
 
 data class Account (
-    val id: Int,
+    val accountId: String,
     val accountName: String,
     val totalAmount: Double,
     val income: Double,

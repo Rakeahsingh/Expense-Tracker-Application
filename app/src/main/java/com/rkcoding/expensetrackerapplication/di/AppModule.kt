@@ -9,6 +9,7 @@ import com.rkcoding.expensetrackerapplication.app_features.data.repository.Fireb
 import com.rkcoding.expensetrackerapplication.app_features.data.repository.UserAuthRepositoryImpl
 import com.rkcoding.expensetrackerapplication.app_features.domain.repository.FirebaseTransactionRepository
 import com.rkcoding.expensetrackerapplication.app_features.domain.repository.UserAuthRepository
+import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetAccountDetails
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,6 +41,12 @@ object AppModule {
     @Singleton
     fun provideUserAuthRepository(firebaseAuth: FirebaseAuth): UserAuthRepository{
         return UserAuthRepositoryImpl(firebaseAuth)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUseCase(repository: FirebaseTransactionRepository): GetAccountDetails{
+        return GetAccountDetails(repository)
     }
 
 }

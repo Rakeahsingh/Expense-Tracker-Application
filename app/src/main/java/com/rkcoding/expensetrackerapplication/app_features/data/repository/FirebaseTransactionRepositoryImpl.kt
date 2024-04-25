@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
+import com.rkcoding.expensetrackerapplication.app_features.domain.model.Account
 import com.rkcoding.expensetrackerapplication.app_features.domain.model.Transaction
 import com.rkcoding.expensetrackerapplication.app_features.domain.repository.FirebaseTransactionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -100,7 +101,7 @@ class FirebaseTransactionRepositoryImpl(
             .await()
             .documents
             .mapNotNull { document ->
-               Transaction(
+                Transaction(
                    transactionId = document.getString("transactionId") ?: return@mapNotNull null,
                    transactionTitle = document.getString("transactionTitle") ?: "",
 //                   date = document.getString("date") ?: "",
@@ -109,7 +110,31 @@ class FirebaseTransactionRepositoryImpl(
                    transactionAmount = document.getDouble("transactionAmount") ?: 0.0,
                    category = document.getString("category") ?: "",
                    transactionType = document.getString("transactionType") ?: ""
-               )
+
+//                val transactionId = document.getString("transactionId") ?: return@mapNotNull null
+//                val transactionTitle = document.getString("transactionTitle") ?: ""
+//                val entryDate = document.getString("entryDate") ?: ""
+//                val accountTypeId = document.getString("accountType") ?: ""
+//                val transactionAmount = document.getDouble("transactionAmount") ?: 0.0
+//                val category = document.getString("category") ?: ""
+//                val transactionType = document.getString("transactionType") ?: ""
+//
+//                   val account = getAccountById(accountTypeId)
+//                   if (account != null){
+//                       Transaction(
+//                           transactionId,
+//                           transactionTitle,
+//                           entryDate,
+//                           account,
+//                           transactionAmount,
+//                           category,
+//                           transactionType
+//                       )
+//                   }else{
+//                       null
+//                   }
+                )
+
             }.reversed()
     }
 
@@ -139,6 +164,7 @@ class FirebaseTransactionRepositoryImpl(
                 val transactionAmount = document.getDouble("transactionAmount") ?: 0.0
                 val category = document.getString("category") ?: ""
                 val transactionType = document.getString("transactionType") ?: ""
+                
 
                 val transaction = Transaction(transactionId, transactionTitle, entryDate, accountType, transactionAmount, category, transactionType)
                 transactions.add(transaction)
@@ -149,5 +175,24 @@ class FirebaseTransactionRepositoryImpl(
 
     override fun stopTransactionRealTimeUpdate() {
         transactionListenerRegistration?.remove()
+    }
+
+
+    private suspend fun getAccountById(accountId: String): Account?{
+        val userId = firebaseAuth.currentUser?.uid ?: return null
+
+        return try {
+             val accountDocument = fireStore.collection("users")
+                 .document(userId)
+                 .collection("transactions")
+                 .document(accountId)
+                 .get()
+                 .await()
+
+            accountDocument.toObject(Account::class.java)
+        }catch (e: Exception){
+            Log.d("AccountId", "getAccountById is fetching null: ${e.message}")
+            null
+        }
     }
 }
