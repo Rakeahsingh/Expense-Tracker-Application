@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.rkcoding.expensetrackerapplication.app_features.presentation.accountsScreen.component.AccountItem
+import com.rkcoding.expensetrackerapplication.core.navigation.Screen
 
 @Composable
 fun AccountsScreen(
@@ -48,7 +49,11 @@ fun AccountsScreen(
             items(state.accounts){ account ->
                 AccountItem(
                     account = account,
-                    onAccountItemClick = {  }
+                    onAccountItemClick = { accountName ->
+                        navController.navigate(
+                            "${Screen.AccountDetailScreen.route}/$accountName"
+                        )
+                    }
                 )
             }
         }

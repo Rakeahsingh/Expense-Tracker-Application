@@ -69,7 +69,7 @@ fun TransactionItem(
                     .padding(start = 12.dp, end = 12.dp)
             ) {
                 Text(
-                    text = transaction.category,
+                    text = category.title,
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -142,20 +142,10 @@ fun TransactionItem(
 
 }
 
-//fun getCategory(title: String): Category{
-//    var result: Category = Category.FOOD_DRINK
-//    Category.entries.forEach{ category ->
-//        if (category.title == title){
-//            result = category
-//        }
-//    }
-//    return result
-//}
-
 
 fun getCategory(title: String): Category{
     Log.d("categoryTitle", "getCategory: $title")
-    val category = Category.entries.find { it.title == title }
+    val category = Category.entries.find { it.title.uppercase() == title.uppercase() }
 
     if (category != null){
         Log.d("categoryTitleFound", "getCategoryTitle: ${category.title}")

@@ -64,7 +64,7 @@ fun AccountItem(
 
             Text(
                 text = "Balance",
-                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold),
+                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(start = 8.dp)
             )
@@ -79,7 +79,7 @@ fun AccountItem(
                         letterSpacing = 0.4.sp
                     )
                 ){
-                    append("INR")
+                    append("INR ")
                 }
 
                 withStyle(

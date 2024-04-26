@@ -9,7 +9,11 @@ import com.rkcoding.expensetrackerapplication.app_features.data.repository.Fireb
 import com.rkcoding.expensetrackerapplication.app_features.data.repository.UserAuthRepositoryImpl
 import com.rkcoding.expensetrackerapplication.app_features.domain.repository.FirebaseTransactionRepository
 import com.rkcoding.expensetrackerapplication.app_features.domain.repository.UserAuthRepository
-import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetAccountDetails
+import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetAccountUseCase
+import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetMonthlyTransactionUseCase
+import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetTodayTransactionUseCase
+import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetTransactionByAccountUseCase
+import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,8 +49,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideUseCase(repository: FirebaseTransactionRepository): GetAccountDetails{
-        return GetAccountDetails(repository)
+    fun provideUseCase(repository: FirebaseTransactionRepository): GetUseCases{
+        return GetUseCases(
+            accountUseCase = GetAccountUseCase(repository),
+            transactionByAccountUseCase = GetTransactionByAccountUseCase(repository),
+            todayTransactionUseCase = GetTodayTransactionUseCase(repository),
+            monthlyTransactionUseCase = GetMonthlyTransactionUseCase(repository)
+        )
     }
 
 }

@@ -1,11 +1,10 @@
 package com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rkcoding.expensetrackerapplication.app_features.domain.model.Transaction
 import com.rkcoding.expensetrackerapplication.app_features.domain.repository.FirebaseTransactionRepository
-import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetAccountDetails
+import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetUseCases
 import com.rkcoding.expensetrackerapplication.core.UiEvent
 import com.rkcoding.expensetrackerapplication.utils.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val repository: FirebaseTransactionRepository,
-    private val useCase: GetAccountDetails
+    private val useCases: GetUseCases
 ): ViewModel() {
 
     private val _state = MutableStateFlow(HomeScreenState())
@@ -39,8 +38,6 @@ class HomeScreenViewModel @Inject constructor(
 
             getTransaction()
 
-            useCase
-            Log.d("viewModel", "useCase: $useCase")
 
         }
     }
@@ -86,6 +83,31 @@ class HomeScreenViewModel @Inject constructor(
                 totalIncome = totalIncome.toInt(),
                 totalExpense = totalExpense.toInt()
             )
+        }
+    }
+
+    fun fetchTodayTransaction(){
+        viewModelScope.launch {
+            val transactions = useCases.todayTransactionUseCase.invoke()
+
+            _state.update {
+                it.copy(
+                    todayTransaction = transactions
+                )
+            }
+        }
+    }
+
+
+    fun fetchMonthlyTransaction(year: Int, month: Int){
+        viewModelScope.launch {
+            val transactions = useCases.monthlyTransactionUseCase.invoke(year, month)
+
+            _state.update {
+                it.copy(
+                    monthlyTransaction = transactions
+                )
+            }
         }
     }
 

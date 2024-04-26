@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
+import com.rkcoding.expensetrackerapplication.app_features.presentation.accountsDetailScreen.AccountsDetailScreen
 import com.rkcoding.expensetrackerapplication.app_features.presentation.accountsScreen.AccountsScreen
 import com.rkcoding.expensetrackerapplication.app_features.presentation.addTransactionScreen.AddTransactionScreen
 import com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen.HomeScreen
@@ -92,6 +93,23 @@ fun MainNavigation(
 
         composable(Screen.AccountScreen.route){
             AccountsScreen(
+                navController = navController
+            )
+        }
+
+        composable(
+            route = "${Screen.AccountDetailScreen.route}/{accountType}",
+            arguments = listOf(
+                navArgument("accountType"){
+                    type = NavType.StringType
+                    defaultValue = "cash"
+                    nullable = true
+                }
+            )
+        ){
+            val accountName = it.arguments?.getString("accountType")
+            AccountsDetailScreen(
+                accountName = accountName,
                 navController = navController
             )
         }

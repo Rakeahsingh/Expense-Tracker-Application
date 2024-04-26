@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rkcoding.expensetrackerapplication.app_features.domain.model.Transaction
 import com.rkcoding.expensetrackerapplication.app_features.domain.repository.FirebaseTransactionRepository
-import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetAccountDetails
 import com.rkcoding.expensetrackerapplication.core.UiEvent
 import com.rkcoding.expensetrackerapplication.core.navigation.Screen
 import com.rkcoding.expensetrackerapplication.utils.Account
@@ -18,15 +17,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class AddTransactionViewModel @Inject constructor(
     private val repository: FirebaseTransactionRepository,
-    private val savedStateHandle: SavedStateHandle,
-    private val useCase: GetAccountDetails
+    private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     private val transactionId = savedStateHandle.get<String>("trxId") ?: ""
@@ -40,7 +36,6 @@ class AddTransactionViewModel @Inject constructor(
 
     init {
         fetchTransaction()
-        useCase
 
     }
 

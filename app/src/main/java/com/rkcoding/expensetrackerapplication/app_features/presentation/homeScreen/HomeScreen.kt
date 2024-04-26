@@ -1,6 +1,7 @@
 package com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -88,6 +89,8 @@ fun HomeScreen(
     // bottom sheet state
     val bottomSheetState = rememberModalBottomSheetState()
     var isBottomSheetOpen by remember { mutableStateOf(false) }
+
+    var isTabButtonShow by remember { mutableStateOf(false) }
 
 
     AddEntryChooser(
@@ -223,7 +226,7 @@ fun HomeScreen(
                                 Spacer(modifier = Modifier.weight(1f))
 
                                 IconButton(
-                                    onClick = { /*TODO*/ },
+                                    onClick = { isTabButtonShow = !isTabButtonShow },
                                 ) {
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Filled.Segment,
@@ -404,7 +407,10 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // Today and monthly tab button
-                TabButton()
+                AnimatedVisibility(visible = isTabButtonShow) {
+                    TabButton()
+                }
+
 
                 Spacer(modifier = Modifier.height(4.dp))
 
@@ -433,12 +439,53 @@ fun HomeScreen(
 
                 }
 
-
-                LazyColumn {
-                    items(state.transaction.reversed()) { transaction ->
-                        TransactionItem(transaction = transaction)
+                when(state.tabButton){
+                    com.rkcoding.expensetrackerapplication.utils.TabButton.TODAY -> {
+                        LazyColumn {
+                            items(state.todayTransaction.reversed()) { transaction ->
+                                TransactionItem(transaction = transaction)
+                            }
+                        }
                     }
+
+                    com.rkcoding.expensetrackerapplication.utils.TabButton.MONTHLY -> {
+                        LazyColumn {
+                            items(state.monthlyTransaction.reversed()) { transaction ->
+                                TransactionItem(transaction = transaction)
+                            }
+                        }
+                    }
+
+                    else -> {
+                        LazyColumn {
+                            items(state.transaction.reversed()) { transaction ->
+                                TransactionItem(transaction = transaction)
+                            }
+                        }
+                    }
+
                 }
+
+
+//                if (state.tabButton == com.rkcoding.expensetrackerapplication.utils.TabButton.TODAY){
+//                    LazyColumn {
+//                        items(state.todayTransaction.reversed()) { transaction ->
+//                            TransactionItem(transaction = transaction)
+//                        }
+//                    }
+//                }else if (state.tabButton == com.rkcoding.expensetrackerapplication.utils.TabButton.MONTHLY){
+//                    LazyColumn {
+//                        items(state.monthlyTransaction.reversed()) { transaction ->
+//                            TransactionItem(transaction = transaction)
+//                        }
+//                    }
+//                }else{
+//                    LazyColumn {
+//                        items(state.transaction.reversed()) { transaction ->
+//                            TransactionItem(transaction = transaction)
+//                        }
+//                    }
+//                }
 
 
             }
