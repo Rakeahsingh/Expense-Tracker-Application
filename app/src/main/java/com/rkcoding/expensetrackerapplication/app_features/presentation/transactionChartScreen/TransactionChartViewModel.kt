@@ -50,6 +50,7 @@ class TransactionChartViewModel @Inject constructor(
                     }
                 }
 
+
                 TransactionType.EXPENSE -> {
                     val transaction = useCases.expenseTransaction.invoke()
                     _state.update {
