@@ -10,9 +10,8 @@ class GetMonthlyTransactionUseCase(
     private val repository: FirebaseTransactionRepository
 ) {
 
-    suspend operator fun invoke(year: Int, month: Int): List<Transaction>{
+    suspend operator fun invoke(yearOfMonth: YearMonth): List<Transaction>{
         val transaction = repository.getTransaction()
-        val yearOfMonth = YearMonth.of(year, month)
 
         return transaction.filter {
             val entryDate = LocalDate.parse(it.entryDate, DateTimeFormatter.ISO_DATE)

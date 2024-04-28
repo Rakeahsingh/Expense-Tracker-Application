@@ -48,8 +48,6 @@ class GetAccountUseCase(
         val totalCardAmount = cardIncome - cardExpense
 
 
-        Log.d("TotalAmount", "invoke: total Amount of accounts $totalCashAmount , $totalBankAmount, $totalCardAmount ")
-
         val cashAccount = Account(
             accountName = com.rkcoding.expensetrackerapplication.utils.Account.CASH.title,
             totalAmount = totalCashAmount,

@@ -9,7 +9,5 @@ data class HomeScreenState(
     val totalExpense: Int = 0,
     val tabButton: TabButton = TabButton.TODAY,
     val transaction: List<Transaction> = emptyList(),
-    val todayTransaction: List<Transaction> = emptyList(),
-    val monthlyTransaction: List<Transaction> = emptyList(),
     val isLoading: Boolean = false
 )

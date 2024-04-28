@@ -10,6 +10,8 @@ import com.rkcoding.expensetrackerapplication.app_features.data.repository.UserA
 import com.rkcoding.expensetrackerapplication.app_features.domain.repository.FirebaseTransactionRepository
 import com.rkcoding.expensetrackerapplication.app_features.domain.repository.UserAuthRepository
 import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetAccountUseCase
+import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetExpenseTransaction
+import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetIncomeTransaction
 import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetMonthlyTransactionUseCase
 import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetTodayTransactionUseCase
 import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetTransactionByAccountUseCase
@@ -54,7 +56,9 @@ object AppModule {
             accountUseCase = GetAccountUseCase(repository),
             transactionByAccountUseCase = GetTransactionByAccountUseCase(repository),
             todayTransactionUseCase = GetTodayTransactionUseCase(repository),
-            monthlyTransactionUseCase = GetMonthlyTransactionUseCase(repository)
+            monthlyTransactionUseCase = GetMonthlyTransactionUseCase(repository),
+            incomeTransaction = GetIncomeTransaction(repository),
+            expenseTransaction = GetExpenseTransaction(repository)
         )
     }
 

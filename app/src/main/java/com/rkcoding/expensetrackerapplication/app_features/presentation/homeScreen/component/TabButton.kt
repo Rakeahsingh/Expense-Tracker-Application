@@ -75,13 +75,6 @@ fun TabButton(
                     onClick = {
                         viewModel.onEvent(HomeScreenEvent.OnTabValueChange(tab))
 
-                        if (state.tabButton == tab && state.tabButton == TabButton.TODAY){
-                            viewModel.fetchTodayTransaction()
-                        }
-
-                        if (state.tabButton == tab && state.tabButton == TabButton.MONTHLY){
-                            viewModel.fetchMonthlyTransaction(2024, 4)
-                        }
 //                          onTabButtonClick()
                     },
                     modifier = Modifier

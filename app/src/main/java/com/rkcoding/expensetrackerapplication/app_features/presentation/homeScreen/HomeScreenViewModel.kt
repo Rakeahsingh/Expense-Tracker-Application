@@ -6,6 +6,7 @@ import com.rkcoding.expensetrackerapplication.app_features.domain.model.Transact
 import com.rkcoding.expensetrackerapplication.app_features.domain.repository.FirebaseTransactionRepository
 import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetUseCases
 import com.rkcoding.expensetrackerapplication.core.UiEvent
+import com.rkcoding.expensetrackerapplication.utils.TabButton
 import com.rkcoding.expensetrackerapplication.utils.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.YearMonth
 import javax.inject.Inject
 
 
@@ -54,7 +56,7 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-   private suspend fun getTransaction(){
+   suspend fun getTransaction(){
         _state.update { it.copy(isLoading = true) }
         repository.transaction.collectLatest { transaction ->
             _state.update {
@@ -86,26 +88,47 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    fun fetchTodayTransaction(){
+
+
+//    fun fetchTodayAndMonthlyTransaction(){
+//        viewModelScope.launch{
+//            val transaction = when(_state.value.tabButton){
+//                TabButton.TODAY -> useCases.todayTransactionUseCase.invoke()
+//                TabButton.MONTHLY -> {
+//                    val currentYearMonth = YearMonth.now()
+//                    useCases.monthlyTransactionUseCase.invoke(currentYearMonth)
+//                }
+//            }
+//
+//            _state.update {
+//                it.copy(
+//                    transaction = transaction
+//                )
+//            }
+//
+//        }
+//    }
+
+    fun fetTodayTransaction(){
         viewModelScope.launch {
-            val transactions = useCases.todayTransactionUseCase.invoke()
+            val transaction = useCases.todayTransactionUseCase.invoke()
 
             _state.update {
                 it.copy(
-                    todayTransaction = transactions
+                    transaction = transaction
                 )
             }
         }
     }
 
-
-    fun fetchMonthlyTransaction(year: Int, month: Int){
+    fun fetMonthlyTransaction(){
         viewModelScope.launch {
-            val transactions = useCases.monthlyTransactionUseCase.invoke(year, month)
+            val currentYearMonth = YearMonth.now()
+            val transaction = useCases.monthlyTransactionUseCase.invoke(currentYearMonth)
 
             _state.update {
                 it.copy(
-                    monthlyTransaction = transactions
+                    transaction = transaction
                 )
             }
         }

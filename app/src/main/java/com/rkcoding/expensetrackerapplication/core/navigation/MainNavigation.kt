@@ -67,22 +67,12 @@ fun MainNavigation(
                     type = NavType.StringType
                     defaultValue = null
                     nullable = true
-                },
-                navArgument("trxPos"){
-                    type = NavType.IntType
-                    defaultValue = -1
-                },
-                navArgument("trxStatus"){
-                    type = NavType.IntType
-                    defaultValue = -1
                 }
             )
         ){
             AddTransactionScreen(
                 transactionTag = it.arguments?.getInt("tag"),
                 transactionId = it.arguments?.getString("trxId"),
-                transactionPos = it.arguments?.getInt("trxPos"),
-                transactionStatus = it.arguments?.getInt("trxStatus"),
                 navController = navController
             )
         }

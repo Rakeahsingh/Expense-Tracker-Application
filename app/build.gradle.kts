@@ -114,6 +114,6 @@ dependencies {
     // coil
     implementation(libs.coil.compose)
 
-    // firebase fireStore
+    // firebase fireStore dependency
     implementation(libs.firebase.firestore)
 }

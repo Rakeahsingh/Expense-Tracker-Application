@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.VerticalAlignTop
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,6 +40,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,10 +61,14 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.android.gms.auth.api.identity.Identity
 import com.rkcoding.expensetrackerapplication.app_features.presentation.component.AddEntryChooser
+import com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen.component.DropDownMenuItem
 import com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen.component.TabButton
 import com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen.component.TransactionItem
 import com.rkcoding.expensetrackerapplication.app_features.presentation.userAuthentication.component.GoogleAuthUiClient
 import com.rkcoding.expensetrackerapplication.core.navigation.Screen
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -99,6 +105,11 @@ fun HomeScreen(
         isOpen = isBottomSheetOpen,
         onDismiss = { isBottomSheetOpen = false }
     )
+
+
+    var isDropDownMenuShow by remember { mutableStateOf(false) }
+
+
 
     Scaffold(
         floatingActionButton = {
@@ -226,7 +237,9 @@ fun HomeScreen(
                                 Spacer(modifier = Modifier.weight(1f))
 
                                 IconButton(
-                                    onClick = { isTabButtonShow = !isTabButtonShow },
+                                    onClick = {
+//                                        isTabButtonShow = !isTabButtonShow
+                                        isDropDownMenuShow = true },
                                 ) {
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Filled.Segment,
@@ -235,8 +248,29 @@ fun HomeScreen(
                                     )
                                 }
 
+                                DropDownMenuItem(
+                                    isExpended = isDropDownMenuShow,
+                                    onDismissRequest = { isDropDownMenuShow = false },
+                                    onTodayMenuClick = {
+                                        viewModel.fetTodayTransaction()
+                                        isDropDownMenuShow = false
+                                    },
+                                    onMonthlyMenuClick = {
+                                        viewModel.fetMonthlyTransaction()
+                                        isDropDownMenuShow = false
+                                    },
+                                    allTransactionClick = {
+                                        scope.launch {
+                                            viewModel.getTransaction()
+                                        }
+                                        isDropDownMenuShow = false
+                                    }
+                                )
+
                             }
                         }
+
+
 
                         Spacer(modifier = Modifier.height(30.dp))
 
@@ -439,56 +473,15 @@ fun HomeScreen(
 
                 }
 
-                when(state.tabButton){
-                    com.rkcoding.expensetrackerapplication.utils.TabButton.TODAY -> {
-                        LazyColumn {
-                            items(state.todayTransaction.reversed()) { transaction ->
-                                TransactionItem(transaction = transaction)
-                            }
-                        }
+                // transactions list
+                LazyColumn {
+                    items(state.transaction.reversed()) { transaction ->
+                        TransactionItem(transaction = transaction)
                     }
-
-                    com.rkcoding.expensetrackerapplication.utils.TabButton.MONTHLY -> {
-                        LazyColumn {
-                            items(state.monthlyTransaction.reversed()) { transaction ->
-                                TransactionItem(transaction = transaction)
-                            }
-                        }
-                    }
-
-                    else -> {
-                        LazyColumn {
-                            items(state.transaction.reversed()) { transaction ->
-                                TransactionItem(transaction = transaction)
-                            }
-                        }
-                    }
-
                 }
 
-
-//                if (state.tabButton == com.rkcoding.expensetrackerapplication.utils.TabButton.TODAY){
-//                    LazyColumn {
-//                        items(state.todayTransaction.reversed()) { transaction ->
-//                            TransactionItem(transaction = transaction)
-//                        }
-//                    }
-//                }else if (state.tabButton == com.rkcoding.expensetrackerapplication.utils.TabButton.MONTHLY){
-//                    LazyColumn {
-//                        items(state.monthlyTransaction.reversed()) { transaction ->
-//                            TransactionItem(transaction = transaction)
-//                        }
-//                    }
-//                }else{
-//                    LazyColumn {
-//                        items(state.transaction.reversed()) { transaction ->
-//                            TransactionItem(transaction = transaction)
-//                        }
-//                    }
-//                }
-
-
             }
+
 
     }
 

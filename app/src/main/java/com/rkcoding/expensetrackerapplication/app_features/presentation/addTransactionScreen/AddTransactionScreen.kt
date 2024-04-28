@@ -48,8 +48,6 @@ import kotlinx.coroutines.flow.collectLatest
 fun AddTransactionScreen(
     transactionTag: Int?,
     transactionId: String?,
-    transactionPos: Int?,
-    transactionStatus: Int?,
     navController: NavController,
     viewModel: AddTransactionViewModel = hiltViewModel()
 ) {

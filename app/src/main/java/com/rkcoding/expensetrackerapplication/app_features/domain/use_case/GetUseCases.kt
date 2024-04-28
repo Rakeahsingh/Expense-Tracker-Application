@@ -4,5 +4,7 @@ data class GetUseCases(
     val accountUseCase: GetAccountUseCase,
     val transactionByAccountUseCase: GetTransactionByAccountUseCase,
     val todayTransactionUseCase: GetTodayTransactionUseCase,
-    val monthlyTransactionUseCase: GetMonthlyTransactionUseCase
+    val monthlyTransactionUseCase: GetMonthlyTransactionUseCase,
+    val incomeTransaction: GetIncomeTransaction,
+    val expenseTransaction: GetExpenseTransaction
 )
