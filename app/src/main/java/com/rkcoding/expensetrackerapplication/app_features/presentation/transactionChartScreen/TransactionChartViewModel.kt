@@ -20,9 +20,9 @@ class TransactionChartViewModel @Inject constructor(
     private val _state = MutableStateFlow(TransactionChartState())
     val state = _state.asStateFlow()
 
-    init {
-        fetchTransaction()
-    }
+//    init {
+//        fetchTransaction()
+//    }
 
     fun onEvent(event: TransactionChartEvent){
         when(event){
@@ -39,27 +39,43 @@ class TransactionChartViewModel @Inject constructor(
 
     private fun fetchTransaction(){
         viewModelScope.launch {
-            when(_state.value.transactionTab){
+            val transactionType = _state.value.transactionTab.value.toString()
+            val transaction = when(transactionType){
 
-                TransactionType.INCOME -> {
-                    val transaction = useCases.incomeTransaction.invoke()
-                    _state.update {
-                        it.copy(
-                            transaction = transaction
-                        )
-                    }
-                }
+                TransactionType.INCOME.value.toString() -> useCases.incomeTransaction.invoke()
 
+                TransactionType.EXPENSE.value.toString() -> useCases.expenseTransaction.invoke()
 
-                TransactionType.EXPENSE -> {
-                    val transaction = useCases.expenseTransaction.invoke()
-                    _state.update {
-                        it.copy(
-                            transaction = transaction
-                        )
-                    }
-                }
+                else -> emptyList()
 
+            }
+
+            _state.update {
+                it.copy(
+                    transaction = transaction
+                )
+            }
+
+        }
+    }
+
+    fun fetchIncomeTransaction(){
+        viewModelScope.launch {
+            val transaction = useCases.incomeTransaction.invoke()
+            _state.update {
+                it.copy(
+                    transaction = transaction
+                )
+            }
+        }
+    }
+    fun fetchExpenseTransaction(){
+        viewModelScope.launch {
+            val transaction = useCases.expenseTransaction.invoke()
+            _state.update {
+                it.copy(
+                    transaction = transaction
+                )
             }
         }
     }

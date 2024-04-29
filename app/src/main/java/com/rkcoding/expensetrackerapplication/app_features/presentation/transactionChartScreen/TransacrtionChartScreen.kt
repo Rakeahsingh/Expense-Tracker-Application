@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen.component.TransactionItem
+import com.rkcoding.expensetrackerapplication.app_features.presentation.transactionChartScreen.component.BarChartItem
 import com.rkcoding.expensetrackerapplication.app_features.presentation.transactionChartScreen.component.TransactionTabButton
 
 @Composable
@@ -24,6 +25,13 @@ fun TransactionChartScreen(
 ) {
 
     val state by viewModel.state.collectAsState()
+
+    if (state.transactionTab.value == 0){
+        viewModel.fetchIncomeTransaction()
+    }else{
+        viewModel.fetchExpenseTransaction()
+    }
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -35,9 +43,12 @@ fun TransactionChartScreen(
         // transaction tab button
         TransactionTabButton()
 
+        // bar chart item
+        BarChartItem()
+
         // transaction list
         LazyColumn {
-            items(state.transaction.reversed()){ transaction ->
+            items(state.transaction){ transaction ->
                 TransactionItem(transaction = transaction)
             }
         }
