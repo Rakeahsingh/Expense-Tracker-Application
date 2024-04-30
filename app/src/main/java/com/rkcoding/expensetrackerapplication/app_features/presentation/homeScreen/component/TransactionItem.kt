@@ -165,6 +165,8 @@ fun formatTimestamp(timestampString: String): String {
 
     // Format the Date object into the desired date-time format
     val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss a", Locale.getDefault())
+    Log.d("Transaction Date", "formatTimestamp Transaction date is : $dateFormat")
+
     return dateFormat.format(date)
 }
 

@@ -1,5 +1,6 @@
 package com.rkcoding.expensetrackerapplication.app_features.presentation.addTransactionScreen
 
+import android.widget.Toast
 import androidx.compose.material3.SnackbarDuration
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -41,6 +42,7 @@ class AddTransactionViewModel @Inject constructor(
 
     fun onEvent(event: AddTransactionEvent){
         when(event){
+
             AddTransactionEvent.AddTransactionButtonClick -> addTransaction()
 
             AddTransactionEvent.CancelTransactionButtonClick -> cancelTransaction()
@@ -106,22 +108,27 @@ class AddTransactionViewModel @Inject constructor(
         viewModelScope.launch {
             try {
 
-                repository.addTransaction(
-                    Transaction(
-                        transactionId = _state.value.transactionId,
-                        transactionTitle = _state.value.transactionTitle,
+                if (_state.value.transactionTitle.isEmpty()){
+                    return@launch
+                }
+
+                val transaction = Transaction(
+                    transactionId = _state.value.transactionId,
+                    transactionTitle = _state.value.transactionTitle,
 //                        date = _state.value.date,
-                        entryDate = _state.value.entryDate,
-                        accountType = _state.value.accountType.title,
-                        transactionAmount = _state.value.transactionAmount,
-                        category = _state.value.category.toString(),
-                        transactionType = transactionType.toString()
-                    )
+                    entryDate = _state.value.entryDate,
+                    accountType = _state.value.accountType.title,
+                    transactionAmount = _state.value.transactionAmount,
+                    category = _state.value.category.toString(),
+                    transactionType = transactionType.toString()
                 )
+
+                repository.addTransaction(transaction)
 
                 _uiEvent.send(
                     UiEvent.NavigateTo(Screen.HomeScreen.route)
                 )
+
                 _uiEvent.send(
                     UiEvent.ShowSnackBar(
                         message = "Transaction Added Successfully",

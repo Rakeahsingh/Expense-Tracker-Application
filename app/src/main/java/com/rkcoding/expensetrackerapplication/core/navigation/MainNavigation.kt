@@ -22,7 +22,9 @@ import com.rkcoding.expensetrackerapplication.app_features.presentation.welcomeS
 fun MainNavigation(
     firebaseAuth: FirebaseAuth,
     navController: NavHostController,
-    startDestination: String
+    startDestination: String,
+    isChecked: Boolean,
+    isCheckedValueChange: (Boolean) -> Unit
 ) {
 
 //    val hasUser = firebaseAuth.currentUser?.uid
@@ -105,7 +107,12 @@ fun MainNavigation(
         }
 
         composable(Screen.SettingScreen.route){
-            SettingScreen()
+            SettingScreen(
+                isChecked = isChecked,
+                isCheckedValueChange ={
+                    isCheckedValueChange(it)
+                }
+            )
         }
 
     }

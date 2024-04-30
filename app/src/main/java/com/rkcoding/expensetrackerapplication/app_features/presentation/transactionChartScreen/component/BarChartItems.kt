@@ -2,7 +2,6 @@ package com.rkcoding.expensetrackerapplication.app_features.presentation.transac
 
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,10 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,9 +27,8 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.rkcoding.expensetrackerapplication.app_features.domain.model.Transaction
 import com.rkcoding.expensetrackerapplication.ui.theme.Amber500
 import com.rkcoding.expensetrackerapplication.ui.theme.DeepPurple300
 import com.rkcoding.expensetrackerapplication.ui.theme.Green200
@@ -49,15 +43,10 @@ import kotlin.math.roundToInt
 @Composable
 fun BarChartItem() {
 
-    var showDescription by remember {
-        mutableStateOf(false)
-    }
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(300.dp)
-//            .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f))
             .padding(horizontal = 12.dp, vertical = 8.dp),
         contentAlignment = Alignment.TopCenter
     ){
@@ -68,11 +57,6 @@ fun BarChartItem() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-//            Text(
-//                text = "Preferred Programming Language",
-//                fontWeight = FontWeight.Bold,
-//                fontSize = 24.sp
-//            )
 
             BarCharts(
                 inputList = listOf(
@@ -88,34 +72,9 @@ fun BarChartItem() {
                 ) ,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                showDescription = showDescription
+                    .horizontalScroll(rememberScrollState())
             )
 
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(start = 12.dp),
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.Start
-//            ) {
-//                Text(
-//                    text = "Show Description",
-//                    fontWeight = FontWeight.SemiBold
-//                )
-//
-//                Switch(
-//                    checked = showDescription,
-//                    onCheckedChange = {
-//                        showDescription = it
-//                    },
-//                    colors = SwitchDefaults.colors(
-//                        checkedThumbColor = MaterialTheme.colorScheme.primary,
-//                        uncheckedThumbColor = MaterialTheme.colorScheme.onSurface
-//                    )
-//                )
-//
-//            }
 
         }
 
@@ -128,7 +87,7 @@ fun BarChartItem() {
 fun BarCharts(
     inputList: List<BarChatInput>,
     modifier: Modifier = Modifier,
-    showDescription: Boolean
+//    showDescription: Boolean
 ) {
 
     Row(
@@ -150,7 +109,7 @@ fun BarCharts(
                 primaryColor = input.color,
                 percentage = percentage,
                 description = input.description,
-                showDescription = showDescription
+//                showDescription = showDescription
             )
         }
 
@@ -165,7 +124,7 @@ fun Bar(
     primaryColor: Color,
     percentage: Float,
     description: String,
-    showDescription: Boolean
+//    showDescription: Boolean
 ) {
 
     Box(
@@ -176,6 +135,7 @@ fun Bar(
         Canvas(
             modifier = Modifier.fillMaxSize()
         ) {
+
             val width = size.width
             val height = size.height
             val barWidth = width/5*3

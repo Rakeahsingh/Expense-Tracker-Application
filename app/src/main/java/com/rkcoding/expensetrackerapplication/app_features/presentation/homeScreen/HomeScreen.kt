@@ -37,10 +37,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -61,10 +64,12 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.android.gms.auth.api.identity.Identity
 import com.rkcoding.expensetrackerapplication.app_features.presentation.component.AddEntryChooser
+import com.rkcoding.expensetrackerapplication.app_features.presentation.component.PlaceHolder
 import com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen.component.DropDownMenuItem
 import com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen.component.TabButton
 import com.rkcoding.expensetrackerapplication.app_features.presentation.homeScreen.component.TransactionItem
 import com.rkcoding.expensetrackerapplication.app_features.presentation.userAuthentication.component.GoogleAuthUiClient
+import com.rkcoding.expensetrackerapplication.core.UiEvent
 import com.rkcoding.expensetrackerapplication.core.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -96,7 +101,11 @@ fun HomeScreen(
     val bottomSheetState = rememberModalBottomSheetState()
     var isBottomSheetOpen by remember { mutableStateOf(false) }
 
-    var isTabButtonShow by remember { mutableStateOf(false) }
+    val isTabButtonShow by remember { mutableStateOf(false) }
+
+    val scaffoldState = remember {
+        SnackbarHostState()
+    }
 
 
     AddEntryChooser(
@@ -109,9 +118,25 @@ fun HomeScreen(
 
     var isDropDownMenuShow by remember { mutableStateOf(false) }
 
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collectLatest { event ->
+            when(event){
+                is UiEvent.NavigateTo -> {
+                    navController.navigate(event.route)
+                }
+                is UiEvent.ShowSnackBar -> {
+                    scaffoldState.showSnackbar(
+                        message = event.message,
+                        duration = event.duration
+                    )
+                }
+            }
+        }
+    }
 
 
     Scaffold(
+        snackbarHost = { SnackbarHost(hostState = scaffoldState) },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
@@ -471,6 +496,10 @@ fun HomeScreen(
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                     )
 
+                }
+
+                if (state.transaction.isEmpty()){
+                    PlaceHolder()
                 }
 
                 // transactions list
