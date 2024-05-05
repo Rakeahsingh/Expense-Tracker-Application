@@ -196,19 +196,7 @@ fun HomeScreen(
                                             .size(40.dp)
                                             .clip(CircleShape)
                                             .border(1.dp, Color.White, CircleShape)
-                                            .clickable {
-                                                scope.launch {
-                                                    googleAuthClient.sinOut()
-                                                    Toast
-                                                        .makeText(
-                                                            context,
-                                                            "SignOut Successfully...",
-                                                            Toast.LENGTH_SHORT
-                                                        )
-                                                        .show()
-                                                    navController.navigate(Screen.MainScreen.route)
-                                                }
-                                            }
+
                                     )
                                 }else{
                                     Icon(
@@ -218,19 +206,6 @@ fun HomeScreen(
                                             .size(40.dp)
                                             .clip(CircleShape)
                                             .border(1.dp, Color.Black, CircleShape)
-                                            .clickable {
-                                                scope.launch {
-                                                    googleAuthClient.sinOut()
-                                                    Toast
-                                                        .makeText(
-                                                            context,
-                                                            "SignOut Successfully...",
-                                                            Toast.LENGTH_SHORT
-                                                        )
-                                                        .show()
-                                                    navController.navigate(Screen.MainScreen.route)
-                                                }
-                                            }
                                     )
                                 }
 

@@ -10,6 +10,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class GetTodayTransactionUseCase(
@@ -17,32 +18,38 @@ class GetTodayTransactionUseCase(
 ) {
 
     suspend operator fun invoke(): List<Transaction>{
-        val transaction = repository.getTransaction()
+        val transactions = repository.getTransaction()
 
-        val date = formatDate(Calendar.getInstance().time.toString())
-        Log.d("current date", "invoke current date is : $date")
-
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
-        Log.d("current date", "invoke current date is : $dateFormat")
-
-        return transaction.filter {
-            it.entryDate == date
+        // Filter transactions based on date part of entryDate
+        val filteredTransactions = transactions.filter { transaction ->
+            val entryDate = formatTimestamp(transaction.entryDate)
+            val currentDate = getCurrentDate()
+            println("Entry Date: $entryDate, Current Date: $currentDate")
+            entryDate == currentDate
         }
+
+        return filteredTransactions
     }
 
-    fun formatDate(timestampString: String): String {
+    private fun formatTimestamp(timestampString: String): String {
         // Parse the timestamp string to a Long value
         val timestamp = timestampString.toLong()
 
-        // Convert the timestamp to LocalDateTime
-        val localDateTime = LocalDateTime.ofInstant(
-            Instant.ofEpochMilli(timestamp),
-            ZoneId.systemDefault()
-        )
+        // Create a Date object from the timestamp
+        val date = Date(timestamp)
 
-        // Format the LocalDateTime into the desired date format
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        return localDateTime.format(formatter)
+        // Format the Date object into the desired date format
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return dateFormat.format(date)
+    }
+
+    private fun getCurrentDate(): String {
+        // Get the current date
+        val currentDate = Date()
+
+        // Format the current date into the desired date format
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return dateFormat.format(currentDate)
     }
 
 }

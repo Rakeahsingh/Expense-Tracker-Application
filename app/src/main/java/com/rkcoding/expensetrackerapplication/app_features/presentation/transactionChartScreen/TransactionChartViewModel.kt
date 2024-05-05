@@ -3,6 +3,7 @@ package com.rkcoding.expensetrackerapplication.app_features.presentation.transac
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetUseCases
+import com.rkcoding.expensetrackerapplication.utils.Category
 import com.rkcoding.expensetrackerapplication.utils.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,6 +78,20 @@ class TransactionChartViewModel @Inject constructor(
                     transaction = transaction
                 )
             }
+        }
+    }
+
+    fun fetchIncomeTransactionByCategory(category: Category){
+        viewModelScope.launch {
+
+            val transaction = useCases.incomeTransactionByCategory.invoke(category)
+
+            _state.update {
+                it.copy(
+                    transaction = transaction,
+                )
+            }
+
         }
     }
 

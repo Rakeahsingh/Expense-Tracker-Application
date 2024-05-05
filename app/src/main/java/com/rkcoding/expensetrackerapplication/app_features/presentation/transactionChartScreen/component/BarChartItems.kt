@@ -1,6 +1,9 @@
 package com.rkcoding.expensetrackerapplication.app_features.presentation.transactionChartScreen.component
 
 import android.graphics.Paint
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,7 +33,9 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.rkcoding.expensetrackerapplication.app_features.domain.model.Transaction
+import com.rkcoding.expensetrackerapplication.app_features.presentation.transactionChartScreen.TransactionChartViewModel
 import com.rkcoding.expensetrackerapplication.ui.theme.Amber500
 import com.rkcoding.expensetrackerapplication.ui.theme.DeepPurple300
 import com.rkcoding.expensetrackerapplication.ui.theme.Green200
@@ -37,11 +44,29 @@ import com.rkcoding.expensetrackerapplication.ui.theme.Purple80
 import com.rkcoding.expensetrackerapplication.ui.theme.Red200
 import com.rkcoding.expensetrackerapplication.ui.theme.Red500
 import com.rkcoding.expensetrackerapplication.ui.theme.giftBg
+import com.rkcoding.expensetrackerapplication.utils.Category
+import com.rkcoding.expensetrackerapplication.utils.TransactionType
 import kotlin.math.roundToInt
 
 
 @Composable
-fun BarChartItem() {
+fun BarChartItem(
+    viewModel: TransactionChartViewModel = hiltViewModel()
+) {
+
+    val state by viewModel.state.collectAsState()
+    val category by remember { mutableStateOf(Category.FOOD_DRINK) }
+
+    LaunchedEffect(key1 = category) {
+        viewModel.fetchIncomeTransactionByCategory(category)
+    }
+
+//    val transactionAmount = state.transaction.filter {
+//        it.category == category.title
+//    }.sumOf { it.transactionAmount.toInt() }
+
+    val primaryColor = Color(0xFF6200EE)
+
 
     Box(
         modifier = Modifier
@@ -53,23 +78,29 @@ fun BarChartItem() {
 
         Column(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
 
             BarCharts(
-                inputList = listOf(
-                    BarChatInput(28, "Kotlin", Red500),
-                    BarChatInput(20, "java", Red200),
-                    BarChatInput(15, "php", GreenAlpha700),
-                    BarChatInput(12, "go", Green200),
-                    BarChatInput(8, "java script", Color.Gray),
-                    BarChatInput(32, "python", DeepPurple300),
-                    BarChatInput(5, "c", Purple80),
-                    BarChatInput(50, "c++", Amber500),
-                    BarChatInput(33, ".net", giftBg)
-                ) ,
+                inputList = state.transaction.map { transaction ->
+                    BarChatInput(
+                        transaction.transactionAmount.toInt(),
+                        transaction.category,
+                        primaryColor)
+                },
+//                listOf(
+//                    BarChatInput(28, "Kotlin", Red500),
+//                    BarChatInput(20, "java", Red200),
+//                    BarChatInput(15, "php", GreenAlpha700),
+//                    BarChatInput(12, "go", Green200),
+//                    BarChatInput(8, "java script", Color.Gray),
+//                    BarChatInput(32, "python", DeepPurple300),
+//                    BarChatInput(5, "c", Purple80),
+//                    BarChatInput(50, "c++", Amber500),
+//                    BarChatInput(33, ".net", giftBg)
+//                ) ,
                 modifier = Modifier
                     .fillMaxWidth()
                     .horizontalScroll(rememberScrollState())
@@ -86,9 +117,21 @@ fun BarChartItem() {
 @Composable
 fun BarCharts(
     inputList: List<BarChatInput>,
-    modifier: Modifier = Modifier,
-//    showDescription: Boolean
+    modifier: Modifier = Modifier
 ) {
+
+    val animationSpec = remember {
+        TweenSpec<Float>(
+            1000,
+            easing =  LinearOutSlowInEasing
+        )
+    }
+
+    val animationProgress by animateFloatAsState(
+        targetValue = 1f,
+        animationSpec = animationSpec,
+        label = "bar animation"
+    )
 
     Row(
         modifier = modifier,
@@ -102,14 +145,14 @@ fun BarCharts(
 
         inputList.forEach { input ->
             val percentage = input.value/listSum.toFloat()
+            val animatedHeight = (120.dp * percentage * inputList.size) * animationProgress
             Bar(
                 modifier = Modifier
                     .height(120.dp * percentage * inputList.size)
                     .width(40.dp),
                 primaryColor = input.color,
                 percentage = percentage,
-                description = input.description,
-//                showDescription = showDescription
+                description = input.description
             )
         }
 
@@ -123,8 +166,7 @@ fun Bar(
     modifier: Modifier = Modifier,
     primaryColor: Color,
     percentage: Float,
-    description: String,
-//    showDescription: Boolean
+    description: String
 ) {
 
     Box(
@@ -152,7 +194,7 @@ fun Bar(
             drawPath(
                 path = path,
                 brush = Brush.linearGradient(
-                    listOf(Color.Gray, primaryColor)
+                    listOf(Color.LightGray, primaryColor)
                 )
             )
 
@@ -166,7 +208,7 @@ fun Bar(
             drawPath(
                 path = path,
                 brush = Brush.linearGradient(
-                    listOf(primaryColor, Color.Gray)
+                    listOf(primaryColor, Color.LightGray)
                 )
             )
 
@@ -180,7 +222,7 @@ fun Bar(
             drawPath(
                 path = path,
                 brush = Brush.linearGradient(
-                    listOf(Color.Gray, Amber500)
+                    listOf(Color.LightGray, Amber500)
                 )
             )
 

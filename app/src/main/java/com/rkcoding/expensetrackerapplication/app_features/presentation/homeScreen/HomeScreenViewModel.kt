@@ -90,25 +90,6 @@ class HomeScreenViewModel @Inject constructor(
 
 
 
-//    fun fetchTodayAndMonthlyTransaction(){
-//        viewModelScope.launch{
-//            val transaction = when(_state.value.tabButton){
-//                TabButton.TODAY -> useCases.todayTransactionUseCase.invoke()
-//                TabButton.MONTHLY -> {
-//                    val currentYearMonth = YearMonth.now()
-//                    useCases.monthlyTransactionUseCase.invoke(currentYearMonth)
-//                }
-//            }
-//
-//            _state.update {
-//                it.copy(
-//                    transaction = transaction
-//                )
-//            }
-//
-//        }
-//    }
-
     fun fetTodayTransaction(){
         viewModelScope.launch {
             val transaction = useCases.todayTransactionUseCase.invoke()

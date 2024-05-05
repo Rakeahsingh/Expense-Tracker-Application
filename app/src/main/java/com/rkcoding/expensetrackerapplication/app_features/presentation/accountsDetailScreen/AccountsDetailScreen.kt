@@ -89,7 +89,7 @@ fun AccountsDetailScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             LazyColumn {
-                items(state.transaction.reversed()){ transaction ->
+                items(state.transaction){ transaction ->
                     TransactionItem(transaction = transaction)
                 }
             }

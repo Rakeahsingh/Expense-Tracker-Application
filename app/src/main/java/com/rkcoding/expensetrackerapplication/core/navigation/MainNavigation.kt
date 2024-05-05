@@ -111,7 +111,8 @@ fun MainNavigation(
                 isChecked = isChecked,
                 isCheckedValueChange ={
                     isCheckedValueChange(it)
-                }
+                },
+                navController = navController
             )
         }
 

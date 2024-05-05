@@ -11,7 +11,9 @@ import com.rkcoding.expensetrackerapplication.app_features.domain.repository.Fir
 import com.rkcoding.expensetrackerapplication.app_features.domain.repository.UserAuthRepository
 import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetAccountUseCase
 import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetExpenseTransaction
+import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetExpenseTransactionByCategory
 import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetIncomeTransaction
+import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetIncomeTransactionByCategory
 import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetMonthlyTransactionUseCase
 import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetTodayTransactionUseCase
 import com.rkcoding.expensetrackerapplication.app_features.domain.use_case.GetTransactionByAccountUseCase
@@ -58,7 +60,9 @@ object AppModule {
             todayTransactionUseCase = GetTodayTransactionUseCase(repository),
             monthlyTransactionUseCase = GetMonthlyTransactionUseCase(repository),
             incomeTransaction = GetIncomeTransaction(repository),
-            expenseTransaction = GetExpenseTransaction(repository)
+            expenseTransaction = GetExpenseTransaction(repository),
+            incomeTransactionByCategory = GetIncomeTransactionByCategory(repository),
+            expenseTransactionByCategory = GetExpenseTransactionByCategory(repository)
         )
     }
 

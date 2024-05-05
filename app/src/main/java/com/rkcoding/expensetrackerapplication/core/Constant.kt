@@ -9,5 +9,6 @@ object Constant {
     const val EXPENSE = "expense"
     const val EXPENSE_LIMIT_KEY = "expense_limit_key"
     const val PRIVACY_URL = "https://github.com/Rakeahsingh"
+    const val PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.ondevop.a75hard"
 
 }
